@@ -1,12 +1,32 @@
-# Camunda Demo App
+# About
 
-**To start an App use folowing command**:
+POC showing integration **React.js + Camunda BPM + REST API (Node.js)** containerised in Docker
+
+## Quick start
+
+> !!! Dependencies: git, docker, docker-compose.
+
+### **To start an App use folowing commands**:
+
+1. Clone current repo:
+
+```
+git clone git@github.com:AlexSKuznetsov/control-app.git
+```
+
+2. Change current directory:
+
+```
+cd control-app
+```
+
+3. Run App:
 
 ```sh
 docker-compose up
 ```
 
-### Links to different parts:
+### **Links to different parts:**
 
 **WebApp UI**:
 http://localhost
