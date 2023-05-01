@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  camunda:
+    image: camunda/camunda-bpm-platform:7.19.0
+    container_name: camunda
+    ports:
+      - '8080:8080'
+
+  webapp:
+    build: ./webapp
+    container_name: webapp
+    ports:
+      - '80:80'
+
+  backend:
+    build: ./backend
+    container_name: express-app
+    command: npm start
+    ports:
+      - '8081:5000'
+    environment:
+      - CAMUNDA_API_BASE_URL=http://camunda:8080/engine-rest
+    depends_on:
+      - camunda
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./mongo-data:/data/db
