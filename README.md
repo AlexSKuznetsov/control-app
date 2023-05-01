@@ -31,11 +31,22 @@ docker-compose up
 **WebApp UI**:
 http://localhost
 
-**Camunda BPM Cockpit**:
-http://localhost:8080/camunda/app
+**Tasklist, Cockpit, Admin web apps**:
 
-Login: demo
-Password: demo
+The three Camunda web apps are accessible through the landing page:
+http://localhost:8080/camunda-welcome/index.html
+
+The default credentials for admin access to the web apps is:
+
+- Username: `demo`
+- Password: `demo`
+
+**REST API**:
+
+The Camunda Rest-API is accessible through: http://localhost:8080/engine-rest
+
+See the [REST API](https://docs.camunda.org/manual/latest/reference/rest/)
+documentation for more details on how to use it.
 
 **MongoDB**:
 

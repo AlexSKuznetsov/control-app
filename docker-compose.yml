@@ -2,14 +2,18 @@ version: '3.9'
 
 services:
   camunda:
-    image: camunda/camunda-bpm-platform:7.19.0
-    container_name: camunda
+    build: ./camunda
+    container_name: camunda-bpm
     ports:
       - '8080:8080'
 
   webapp:
     build: ./webapp
     container_name: webapp
+    depends_on:
+      - camunda
+      - mongodb
+      - backend
     ports:
       - '80:80'
 
