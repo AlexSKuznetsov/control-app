@@ -1,0 +1,3 @@
+export const QUERY_KEYS = {
+  GET_PROCESSES: 'GET_PROCESSES',
+};
