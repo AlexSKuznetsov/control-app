@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { GetProcessList } from '../api/processApi';
+import { getProcessList } from '../api/processApi';
 import { QUERY_KEYS } from '../shared/constants';
 
 export const AdminPage = () => {
   const { isLoading, error, data } = useQuery({
     queryKey: [QUERY_KEYS.GET_PROCESSES],
-    queryFn: GetProcessList,
+    queryFn: getProcessList,
   });
 
   if (isLoading) {
