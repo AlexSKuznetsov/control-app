@@ -1,3 +1,6 @@
+import axios, { AxiosError } from 'axios';
+import { BACKEND_BASE_URL } from '../shared/constants';
+
 type ProcessData = {
   id: string;
   deploymentTime: string;
@@ -7,13 +10,15 @@ type ProcessData = {
   name: string | null;
 };
 
-export const GetProcessList = async () => {
+export const getProcessList = async () => {
   try {
-    const response = await fetch('http://localhost:8081');
-    const data: ProcessData[] = await response.json();
+    const response = await axios.get<ProcessData[]>(
+      `${BACKEND_BASE_URL}/deployment`
+    );
 
-    return data;
-  } catch (err) {
-    console.error(err);
+    return response.data;
+  } catch (e) {
+    const error = e as AxiosError;
+    console.error(error.message);
   }
 };

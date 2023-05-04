@@ -24,6 +24,7 @@ services:
     ports:
       - '8081:5000'
     environment:
+      - PORT=5000
       - CAMUNDA_API_BASE_URL=http://camunda:8080/engine-rest
     depends_on:
       - camunda
@@ -36,3 +37,12 @@ services:
       - '27017:27017'
     volumes:
       - ./mongo-data:/data/db
+
+  notification:
+    build: ./notification-service
+    container_name: notification-service
+    command: npm start
+    ports:
+      - 8082:7000
+    environment:
+      - CAMUNDA_API_BASE_URL=http://camunda:8080/engine-rest

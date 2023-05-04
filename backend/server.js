@@ -1,27 +1,19 @@
 const express = require('express');
 const cors = require('cors');
-const axios = require('axios');
 const app = express();
-require('dotenv').config()
+const { BASE_URL, PORT } = require('./config');
 
-const PORT = 5000;
-
-if (!process.env.CAMUNDA_API_BASE_URL) {
+if (!BASE_URL) {
   throw new Error('Camunda api url not found!')
 }
 
-
+// routes
+const processRoutes = require('./routes/process');
 
 app.use(cors());
 
-app.get('/', async (req, res) => {
-  try {
-    const response = await axios.get(`${process.env.CAMUNDA_API_BASE_URL}/deployment`)
-    res.send(response.data)
-  } catch (error) {
-    console.log(error)
-  }
-})
+app.use('/process', processRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
