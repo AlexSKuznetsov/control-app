@@ -11,6 +11,7 @@ if (!BASE_URL) {
 const processRoutes = require('./routes/process');
 
 app.use(cors());
+app.use(express.json())
 
 app.use('/process', processRoutes);
 

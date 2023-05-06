@@ -14,7 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "camunda-external-task-client-js": "^3.0.0",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
