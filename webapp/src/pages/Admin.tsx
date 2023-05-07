@@ -1,12 +1,18 @@
 import { useCallback } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import * as Toast from '@radix-ui/react-toast';
-import cn from 'classnames';
+import { toast } from 'react-toastify';
+
 import {
   getProcessDefinition,
   startNewInstanceByProcessKey,
 } from '../api/processApi';
+import {
+  PageLayout,
+  ProcessDefinitionElement,
+  NotificationSettings,
+  UserSettings,
+} from '../components';
 import { QUERY_KEYS } from '../shared/constants';
 
 export const AdminPage = () => {
@@ -19,13 +25,26 @@ export const AdminPage = () => {
     queryFn: getProcessDefinition,
   });
 
-  const { mutate, isLoading: mutationLoading } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: startNewInstanceByProcessKey,
+    onSuccess: (data) =>
+      toast(
+        <div className='text-sm'>
+          Process instance has been started.
+          <p className='text-xs'>{data.id}</p>
+        </div>,
+        { type: 'success', position: 'bottom-right' }
+      ),
+
+    onError: () => toast('Something whent wrong', { type: 'warning' }),
   });
 
-  const startProcessInstance = useCallback((processKey: string) => {
-    mutate(processKey);
-  }, []);
+  const startProcessInstance = useCallback(
+    (processKey: string) => {
+      mutate(processKey);
+    },
+    [mutate, processDefinitionData]
+  );
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -37,51 +56,49 @@ export const AdminPage = () => {
 
   if (processDefinitionData?.length) {
     return (
-      <Toast.Provider swipeDirection='right'>
-        <div className='mt-4 mx-4'>
-          <p className='text-lg font-sans mt-4'>Process definition: </p>
-
-          {processDefinitionData?.map((process) => (
-            <li key={process.id} className='my-1 text-sm'>
-              name: {process.name ?? 'noname'} | key: {process.key} | version:{' '}
-              {process.version}
-              {process.key && (
-                <button
-                  disabled={mutationLoading}
-                  className={cn(
-                    'ml-2 h-8 px-2 font-semibold rounded-md bg-blue-700 text-white text-sm hover:bg-blue-500',
-                    {
-                      'bg-slate-400': mutationLoading,
-                    }
-                  )}
-                  onClick={() => startProcessInstance(process.key as string)}
-                >
-                  start instance
-                </button>
-              )}
-            </li>
-          ))}
+      <PageLayout>
+        <div className='grid grid-cols-2 grid-rows-2 gap-12'>
+          <div className='m-2 p-4 border inline-block rounded shadow'>
+            <p className='text-lg font-light mx-2 text-slate-600'>
+              Deployed process list:
+            </p>
+            <div className='flex-col divide-y divide-slate-100'>
+              {processDefinitionData?.map((process) => (
+                <ProcessDefinitionElement
+                  key={process.id}
+                  processDefinition={process}
+                  onButtonClick={startProcessInstance}
+                />
+              ))}
+            </div>
+          </div>
+          <NotificationSettings />
+          <UserSettings />
         </div>
-      </Toast.Provider>
+      </PageLayout>
     );
   }
 
   return (
-    <div className='font-bold text-md my-12 mx-6 bg-slate-100 inline-block p-2 rounded shadow'>
-      <p> There are no processes uploaded to Caumunda Engine.</p>
-      Please use{' '}
-      <Link
-        to={'https://camunda.com/download/modeler'}
-        target='_blank'
-        rel='noopener noreferrer'
-        className='text-blue-600 hover:underline'
-      >
-        Camunda modeler
-      </Link>{' '}
-      for uploading new process.
-      <p className='text-sm font-normal mt-4'>
-        Rest endpoint: http://localhost:8080/engine-rest
-      </p>
-    </div>
+    <PageLayout>
+      <div className='flex items-center justify-center h-full'>
+        <div className='inline-block font-bold text-md my-12 mx-6 bg-slate-100 p-2 rounded shadow'>
+          <p> There are no processes uploaded to Caumunda Engine.</p>
+          Please use{' '}
+          <Link
+            to={'https://camunda.com/download/modeler'}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-blue-600 hover:underline'
+          >
+            Camunda modeler
+          </Link>{' '}
+          for uploading new process.
+          <p className='text-sm font-normal mt-4'>
+            Rest endpoint: http://localhost:8080/engine-rest
+          </p>
+        </div>
+      </div>
+    </PageLayout>
   );
 };
