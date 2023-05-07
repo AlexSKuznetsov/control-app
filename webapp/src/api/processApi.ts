@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { BACKEND_BASE_URL } from '../shared/constants';
+import { ProcessDefinition } from '../types/processDefinition';
 
 type DeploymentData = {
   id: string;
@@ -13,7 +14,7 @@ type DeploymentData = {
 export const getDeploymentData = async () => {
   try {
     const response = await axios.get<DeploymentData[]>(
-      `${BACKEND_BASE_URL}/deployment`
+      `${BACKEND_BASE_URL}/process/deployment`
     );
 
     return response.data;
@@ -23,27 +24,10 @@ export const getDeploymentData = async () => {
   }
 };
 
-type ProcessDefinition = {
-  id: string | null;
-  key: string | null;
-  category: string | null;
-  description: string | null;
-  name: string | null;
-  version: number | null;
-  resource: string | null;
-  deploymentId: string | null;
-  diagram: null | null;
-  suspended: boolean | null;
-  tenantId: string | null;
-  versionTag: string | null;
-  historyTimeToLive: number | null;
-  startableInTasklist: boolean | null;
-};
-
 export const getProcessDefinition = async () => {
   try {
     const response = await axios.get<ProcessDefinition[]>(
-      `${BACKEND_BASE_URL}/process-definition`
+      `${BACKEND_BASE_URL}/process/process-definition`
     );
 
     return response.data;
@@ -58,10 +42,13 @@ export const startNewInstanceByProcessKey = async (
   variables?: string
 ) => {
   try {
-    const response = await axios.post(`${BACKEND_BASE_URL}/start-process`, {
-      processKey,
-      variables,
-    });
+    const response = await axios.post(
+      `${BACKEND_BASE_URL}/process/start-process`,
+      {
+        processKey,
+        variables,
+      }
+    );
 
     return response.data;
   } catch (e) {

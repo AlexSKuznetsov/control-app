@@ -1,3 +1,9 @@
+import { PageLayout } from '../components';
+
 export const Employee = () => {
-  return <div>Employee</div>;
+  return (
+    <PageLayout>
+      <div>Employee</div>
+    </PageLayout>
+  );
 };

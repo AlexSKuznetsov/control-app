@@ -1,3 +1,9 @@
+import { PageLayout } from '../components';
+
 export const Manager = () => {
-  return <div>Manager</div>;
+  return (
+    <PageLayout>
+      <div>Manager</div>
+    </PageLayout>
+  );
 };
