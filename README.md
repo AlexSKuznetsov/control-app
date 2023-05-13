@@ -26,6 +26,12 @@ cd control-app
 docker-compose up
 ```
 
+or for detached mode
+
+```sh
+docker-compose up -d
+```
+
 ### **Links to different parts:**
 
 **WebApp UI**:
@@ -38,8 +44,8 @@ http://localhost:8080/camunda-welcome/index.html
 
 The default credentials for admin access to the web apps is:
 
-- Username: `demo`
-- Password: `demo`
+- Username: `admin`
+- Password: `admin`
 
 **REST API**:
 
@@ -62,6 +68,7 @@ _Use Mongo DB Compas for GUI https://www.mongodb.com/try/download/compass_
 - React
 - Typescript
 - Vite
+- React Query
 
 **2. Backend Rest API:**
 
