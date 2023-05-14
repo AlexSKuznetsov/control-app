@@ -1,9 +1,10 @@
-import { PageLayout } from '../components';
+import { PageLayout, TaskTable } from '../components';
 
 export const Employee = () => {
   return (
     <PageLayout>
-      <div>Employee</div>
+      <div className='text-sm p-8 font-bold'>Employee task list:</div>
+      <TaskTable viewType='employee' />
     </PageLayout>
   );
 };

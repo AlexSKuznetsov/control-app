@@ -25,7 +25,7 @@ router.post('/start-process', async (req, res) => {
   if (processKey) {
     try {
       const response = await axios.post(`${BASE_URL}/process-definition/key/${processKey}/start`, {
-        variables: variables,
+        variables: variables || null,
         businessKey: "manualStart"
       });
 
@@ -55,6 +55,33 @@ router.get('/deployment', async (req, res) => {
     res.send(response.data)
   } catch (error) {
     console.log(error)
+  }
+})
+
+router.get('/get-tasks', async (req, res) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/task`)
+    res.send(response.data)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+router.post('/complete-task', async (req, res) => {
+  try {
+    const taskId = req.body.taskId;
+    const isCompleted = req.body.isCompleted
+    const response = await axios.post(`${BASE_URL}/task/${taskId}/complete`,
+      {
+        "variables": {
+          "checkListApprove": { "value": isCompleted }
+        },
+      }
+
+    )
+    res.send(response.data)
+  } catch (error) {
+    console.log(error.message)
   }
 })
 
