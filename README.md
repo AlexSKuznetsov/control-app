@@ -11,7 +11,7 @@ POC showing integration **React.js + Camunda BPM + REST API (Node.js)** containe
 1. Clone current repo:
 
 ```
-git clone git@github.com:AlexSKuznetsov/control-app.git
+git clone https://github.com/AlexSKuznetsov/control-app.git
 ```
 
 2. Change current directory:
@@ -31,6 +31,12 @@ or for detached mode
 ```sh
 docker-compose up -d
 ```
+
+4. Upload BPMN model from camunda directory to Engine using Modeler
+
+** download link https://camunda.com/download/modeler/ **
+
+<sub>REST endpoint http://localhost:8080/engine-rest</sub>
 
 ### **Links to different parts:**
 
