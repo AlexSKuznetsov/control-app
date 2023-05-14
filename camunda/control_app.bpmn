@@ -3,7 +3,7 @@
   <bpmn:collaboration id="Collaboration_1u5373z">
     <bpmn:participant id="Participant_08jdeve" name="Control process" processRef="Process_0i0x9i6" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_0i0x9i6" isExecutable="true" camunda:historyTimeToLive="1">
+  <bpmn:process id="Process_0i0x9i6" name="Control App" isExecutable="true" camunda:historyTimeToLive="1">
     <bpmn:extensionElements />
     <bpmn:laneSet id="LaneSet_16lk81a">
       <bpmn:lane id="Lane_1n1fgyf" name="Employee">
@@ -21,6 +21,7 @@
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:userTask id="Activity_0vy0s8q" name="Fill inspection checklist report" camunda:assignee="employee">
+      <bpmn:extensionElements />
       <bpmn:incoming>Flow_1o36fk1</bpmn:incoming>
       <bpmn:outgoing>Flow_02qep59</bpmn:outgoing>
     </bpmn:userTask>
@@ -146,6 +147,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1o3dfkk_di" bpmnElement="Event_08ck9zq">
         <dc:Bounds x="492" y="199" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="471" y="242" width="78" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1o36fk1_di" bpmnElement="Flow_1o36fk1">
         <di:waypoint x="390" y="257" />

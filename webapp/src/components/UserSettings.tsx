@@ -25,11 +25,14 @@ export const UserSettings = () => {
         User settings:
         {!isEmpty(data) ? (
           data?.map((user) => (
-            <div className='flex text-xs gap-4 text-slate-600 ml-2 mt-2'>
-              <span key={user.id}>User ID: {user.id}</span>
-              <span key={user.id}>First name: {user.firstName}</span>
-              <span key={user.id}>Last name: {user.lastName}</span>
-              <span key={user.id}>Email: {user.email || 'none'}</span>
+            <div
+              key={user.id}
+              className='flex text-xs gap-4 text-slate-600 ml-2 mt-2'
+            >
+              <span>User ID: {user.id}</span>
+              <span>First name: {user.firstName}</span>
+              <span>Last name: {user.lastName}</span>
+              <span>Email: {user.email || 'none'}</span>
             </div>
           ))
         ) : (
