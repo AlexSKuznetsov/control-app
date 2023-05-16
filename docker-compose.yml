@@ -23,7 +23,7 @@ services:
     build: ./backend
     container_name: express-app
     command: npm start
-    restart: always
+    restart: on-failure
     ports:
       - '8081:5000'
     environment:
@@ -36,6 +36,7 @@ services:
   mongodb:
     image: mongo:latest
     container_name: mongodb
+    restart: always
     ports:
       - '27017:27017'
     volumes:

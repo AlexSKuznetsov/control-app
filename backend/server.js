@@ -1,25 +1,38 @@
-const express = require('express');
-const cors = require('cors');
-const app = express();
-const { BASE_URL, PORT } = require('./config');
-const seed = require('./seed');
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
 
-if (!BASE_URL) {
-  throw new Error('Camunda api url not found!')
-}
+// config
+import { BASE_URL, PORT } from './config.js';
+
+// camunda users seed
+import seed from './seed.js';
 
 // routes
-const processRoutes = require('./routes/process');
-const userRoutes = require('./routes/users');
+import processRoutes from './routes/process.js';
+import userRoutes from './routes/users.js';
 
+const app = express();
+
+if (!BASE_URL) {
+  throw new Error('Camunda api url not found!');
+}
+
+app.use(morgan('dev'));
+app.use(helmet());
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 
 app.use('/process', processRoutes);
-app.use('/users', userRoutes)
+app.use('/users', userRoutes);
 
+app.get('/', (_, res) => {
+  res.send('working');
+})
+
+// seeding Camunda Engine with 3 users
 seed();
-
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
