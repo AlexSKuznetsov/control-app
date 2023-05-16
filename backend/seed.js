@@ -1,6 +1,6 @@
-const axios = require('axios');
-const { BASE_URL } = require('./config');
-const { use } = require('./routes/process');
+import axios from 'axios';
+import { BASE_URL } from './config.js';
+
 
 const MOCK_USER_LIST = [
   {
@@ -92,4 +92,4 @@ const seed = async () => {
   }
 }
 
-module.exports = seed;
+export default seed;

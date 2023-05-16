@@ -1,8 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const axios = require('axios');
-const { BASE_URL } = require('../config');
+import { Router } from 'express';
+import axios from 'axios';
+import { BASE_URL } from '../config.js';
 
+const router = Router();
 router.get('/user-list', async (req, res) => {
   try {
     const response = await axios.get(`${BASE_URL}/user`)
@@ -12,4 +12,4 @@ router.get('/user-list', async (req, res) => {
   }
 })
 
-module.exports = router;
+export default router;

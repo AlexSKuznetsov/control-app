@@ -1,7 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const axios = require('axios');
-const { BASE_URL } = require('../config');
+import { Router } from 'express';
+import axios from 'axios';
+import { BASE_URL } from '../config.js';
+import { createProcessPayload } from '../controllers/processController.js'
+
+const router = Router();
 
 // define routes
 router.get('/process-definition', async (req, res) => {
@@ -28,6 +30,9 @@ router.post('/start-process', async (req, res) => {
         variables: variables || null,
         businessKey: "manualStart"
       });
+
+      const result = await createProcessPayload(response.data.id)
+      console.log(result);
 
       return res.json(response.data)
 
@@ -87,4 +92,4 @@ router.post('/complete-task', async (req, res) => {
 
 
 
-module.exports = router;
+export default router;
