@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import cn from 'classnames';
 import { ProcessDefinition } from '../types/processDefinition';
 
@@ -11,16 +11,9 @@ export const ProcessDefinitionElement: React.FC<PropsType> = ({
   onButtonClick,
   processDefinition,
 }) => {
-  const [isLoading, setIsloading] = useState(false);
-
   const onClick = useCallback(() => {
-    setIsloading(true);
     onButtonClick(processDefinition.key as string);
-
-    setTimeout(() => {
-      setIsloading(false);
-    }, 1000);
-  }, [processDefinition, isLoading]);
+  }, [processDefinition]);
 
   return (
     <div className='p-2'>
@@ -47,15 +40,11 @@ export const ProcessDefinitionElement: React.FC<PropsType> = ({
 
         <button
           className={cn(
-            'ml-2 h-8 px-3 rounded-md shadow text-blue-800 border border-blue-600 text-sm hover:bg-slate-100',
-            {
-              'text-slate-500 border-slate-500 cursor-wait': isLoading,
-            }
+            'ml-2 h-8 px-3 rounded-md shadow text-blue-800 border border-blue-600 text-sm hover:bg-slate-100'
           )}
           onClick={onClick}
-          disabled={isLoading}
         >
-          Start instance
+          Manually start instance
         </button>
       </div>
     </div>

@@ -32,7 +32,7 @@ export const AdminPage = () => {
           Process instance has been started.
           <p className='text-xs'>{data.id}</p>
         </div>,
-        { type: 'success', position: 'bottom-right' }
+        { type: 'success', position: 'bottom-right', autoClose: 1000 }
       ),
 
     onError: () => toast('Something whent wrong', { type: 'warning' }),

@@ -5,11 +5,11 @@ import { BASE_URL } from '../config.js';
 const router = Router();
 router.get('/user-list', async (req, res) => {
   try {
-    const response = await axios.get(`${BASE_URL}/user`)
-    res.send(response.data)
+    const response = await axios.get(`${BASE_URL}/user`);
+    res.send(response.data);
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
-})
+});
 
 export default router;

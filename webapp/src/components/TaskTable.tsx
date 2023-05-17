@@ -39,7 +39,7 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
         queryClient.invalidateQueries({
           queryKey: [QUERY_KEYS.GET_EMPLOYEE_TASKS],
         });
-      }, 1000);
+      }, 500);
     },
     [taskId, isOpen]
   );
@@ -120,7 +120,7 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
           <div className='text-end mb-2'>
             {viewType === 'manager' && (
               <Button
-                color='warning'
+                color='error'
                 variant='contained'
                 onClick={() => handleCompleteTask(false)}
                 sx={{
@@ -131,11 +131,11 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
               </Button>
             )}
             <Button
-              color='primary'
+              color={viewType === 'employee' ? 'primary' : 'success'}
               variant='contained'
               onClick={() => handleCompleteTask(true)}
             >
-              Complete task
+              {viewType === 'manager' ? 'Approve task' : 'Complete task'}
             </Button>
           </div>
         </div>

@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 
 // config
-import { BASE_URL, PORT } from './config.js';
+import { BASE_URL, PORT, ENV } from './config.js';
 
 // camunda users seed
 import seed from './seed.js';
@@ -29,11 +29,12 @@ app.use('/users', userRoutes);
 
 app.get('/', (_, res) => {
   res.send('working');
-})
+});
 
 // seeding Camunda Engine with 3 users
 seed();
 
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`)
-})
+  console.log(`Example app listening on port ${PORT}`);
+  console.log('Current env', ENV);
+});
