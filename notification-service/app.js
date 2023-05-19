@@ -1,4 +1,4 @@
-import { Client, logger } from "camunda-external-task-client-js";
+import { Client, Variables, logger } from "camunda-external-task-client-js";
 import express from 'express';
 import * as dotenv from 'dotenv'
 dotenv.config()
@@ -34,6 +34,7 @@ const subscribeToTopic = (topicName) => {
     // Put your business logic
     // complete the task
     console.log(task, taskService)
+
     await taskService.complete(task);
 
   });

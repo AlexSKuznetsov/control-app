@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { BASE_URL } from './config.js';
+import { seedSitesList } from './controllers/processController.js'
 
 const MOCK_USER_LIST = [
   {
@@ -73,6 +74,7 @@ const createNewUsers = async () => {
 
 const seed = async () => {
   const camundaUserList = await getCurrentUserList();
+  await seedSitesList()
   if (camundaUserList && camundaUserList.length > 0) {
     console.log('Camunda already have users');
     return;

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import axios from 'axios';
 import { BASE_URL } from '../config.js';
-import { createProcessPayload } from '../controllers/processController.js';
+import { createProcessPayload, subscribeToTopic } from '../controllers/processController.js';
 
 const router = Router();
 
@@ -85,5 +85,14 @@ router.post('/complete-task', async (req, res) => {
     console.log(error.message);
   }
 });
+
+router.post('/get-sites', (req, res) => {
+  // Extract the new topic name from the webhook payload
+  const newTopicName = req.body.topicName;
+
+  subscribeToTopic(newTopicName);
+
+  res.status(200).send(`Notification topic name was changed to: ${newTopicName}`);
+})
 
 export default router;
