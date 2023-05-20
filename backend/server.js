@@ -12,6 +12,7 @@ import seed from './seed.js';
 // routes
 import processRoutes from './routes/process.js';
 import userRoutes from './routes/users.js';
+import sitesRoutes from './routes/sites.js';
 
 //constollers
 import { subscribeToTopic } from './controllers/processController.js'
@@ -29,6 +30,7 @@ app.use(express.json());
 
 app.use('/process', processRoutes);
 app.use('/users', userRoutes);
+app.use('/sites', sitesRoutes);
 
 app.get('/', (_, res) => {
   res.send('working');

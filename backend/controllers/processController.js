@@ -25,12 +25,13 @@ const payload = {
 
 };
 
-export const createProcessPayload = async (processId) => {
+export const createProcessPayload = async (processId, variables) => {
   try {
     await client.connect();
     const result = await collection.insertOne({
       payload,
       processId,
+      variables,
       status: 'in progress',
       timestamp: new Date(),
     });
@@ -45,22 +46,29 @@ export const createProcessPayload = async (processId) => {
 export const subscribeToTopic = () => {
   camundaClient.subscribe('getSites', async ({ task, taskService }) => {
 
-
     try {
-      // get sites names from MongoDB
-      await client.connect();
-      const siteList = await sitesCollection.find({}).toArray();
+      const processVariables = task.variables.getAll();
 
-      const processVariables = new Variables().set("siteList", siteList[0].sites)
+      if (processVariables.startEventType === 'manual') {
+        const stringArray = processVariables.siteList.split(", ");
+        const newProcessVariables = new Variables().set("siteList", stringArray);
+        await taskService.complete(task, newProcessVariables);
 
-      await taskService.complete(task, processVariables);
-
+      } else {
+        // get sites names from MongoDB
+        await client.connect();
+        const siteList = await sitesCollection.find({}).toArray();
+        const newProcessVariables = new Variables().set("siteList", siteList[0].sites);
+        await taskService.complete(task, newProcessVariables);
+      }
     } catch (e) {
-      console.log(e)
+      console.log(e);
     } finally {
       await client.close();
     }
-  });
+
+  }
+  )
 }
 
 export const seedSitesList = async () => {

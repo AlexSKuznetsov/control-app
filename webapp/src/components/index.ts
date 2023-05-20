@@ -5,3 +5,4 @@ export { ProcessDefinitionElement } from './ProcessDefinition';
 export { NotificationSettings } from './NotyficationSettings';
 export { UserSettings } from './UserSettings';
 export { TaskTable } from './TaskTable';
+export { SimpleDialog } from './StartProcessDialog';

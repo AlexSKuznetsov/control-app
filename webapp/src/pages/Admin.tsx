@@ -24,8 +24,13 @@ export const AdminPage = () => {
     queryFn: getProcessDefinition,
   });
 
-  const { mutate } = useMutation({
-    mutationFn: startNewInstanceByProcessKey,
+  const { mutate } = useMutation<
+    any,
+    Error,
+    { processKey: string; variables?: string }
+  >({
+    mutationFn: ({ processKey, variables }) =>
+      startNewInstanceByProcessKey(processKey, variables),
     onSuccess: (data) =>
       toast(
         <div className='text-sm'>
@@ -40,7 +45,13 @@ export const AdminPage = () => {
 
   const startProcessInstance = useCallback(
     (processKey: string) => {
-      mutate(processKey);
+      mutate({
+        processKey,
+        variables: JSON.stringify({
+          siteList: { value: 'Site 1', type: 'String' },
+          startEventType: { value: 'manual', type: 'String' },
+        }),
+      });
     },
     [mutate, processDefinitionData]
   );

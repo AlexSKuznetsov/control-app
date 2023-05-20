@@ -1,6 +1,7 @@
-import { useCallback } from 'react';
-import cn from 'classnames';
+import { useCallback, useState } from 'react';
+import { SimpleDialog } from './StartProcessDialog';
 import { ProcessDefinition } from '../types/processDefinition';
+import { Button } from '@mui/material';
 
 type PropsType = {
   processDefinition: ProcessDefinition;
@@ -11,6 +12,18 @@ export const ProcessDefinitionElement: React.FC<PropsType> = ({
   onButtonClick,
   processDefinition,
 }) => {
+  const [open, setOpen] = useState(false);
+  const [selectedValue, setSelectedValue] = useState('');
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value: string) => {
+    setOpen(false);
+    setSelectedValue(value);
+  };
+
   const onClick = useCallback(() => {
     onButtonClick(processDefinition.key as string);
   }, [processDefinition]);
@@ -38,15 +51,16 @@ export const ProcessDefinitionElement: React.FC<PropsType> = ({
           </div>
         </div>
 
-        <button
-          className={cn(
-            'ml-2 h-8 px-3 rounded-md shadow text-blue-800 border border-blue-600 text-sm hover:bg-slate-100'
-          )}
-          onClick={onClick}
-        >
-          Manually start instance
-        </button>
+        <Button variant='contained' onClick={handleClickOpen}>
+          Start instance
+        </Button>
       </div>
+      <SimpleDialog
+        selectedValue={selectedValue}
+        open={open}
+        onClose={handleClose}
+        onClick={onClick}
+      />
     </div>
   );
 };
