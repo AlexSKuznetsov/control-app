@@ -1,6 +1,7 @@
 import { MongoClient } from 'mongodb';
 import { Client, Variables, logger } from "camunda-external-task-client-js";
 import { MONGODB_URL, BASE_URL } from '../config.js';
+import { SITE_LIST } from '../mocks/sites.js'
 
 const config = {
   baseUrl: BASE_URL,
@@ -41,31 +42,34 @@ export const createProcessPayload = async (processId) => {
   }
 };
 
-export const subscribeToTopic = (topicName) => {
-  camundaClient.subscribe(topicName, async ({ task, taskService }) => {
-    // Put your business logic
-    // complete the task
-    console.log(task, taskService)
-    const siteList = await sitesCollection.find({}).toArray();
-    const processVariables = new Variables()
-      .set("siteList", JSON.stringify(siteList.sites))
-    await taskService.complete(task, processVariables);
+export const subscribeToTopic = () => {
+  camundaClient.subscribe('getSites', async ({ task, taskService }) => {
 
+
+    try {
+      // get sites names from MongoDB
+      await client.connect();
+      const siteList = await sitesCollection.find({}).toArray();
+
+      const processVariables = new Variables().set("siteList", siteList[0].sites)
+
+      await taskService.complete(task, processVariables);
+
+    } catch (e) {
+      console.log(e)
+    } finally {
+      await client.close();
+    }
   });
 }
 
 export const seedSitesList = async () => {
-  const newList = [
-    "Site 1",
-    "Site 2",
-    "Site 3",
-  ];
 
   try {
     const dbList = await sitesCollection.find({}).toArray();
 
     if (dbList.length === 0) {
-      const result = await sitesCollection.insertOne({ sites: newList });
+      const result = await sitesCollection.insertOne({ sites: SITE_LIST });
       console.log('site list created', result.insertedId);
     }
 

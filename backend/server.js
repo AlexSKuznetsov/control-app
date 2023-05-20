@@ -13,6 +13,9 @@ import seed from './seed.js';
 import processRoutes from './routes/process.js';
 import userRoutes from './routes/users.js';
 
+//constollers
+import { subscribeToTopic } from './controllers/processController.js'
+
 const app = express();
 
 if (!BASE_URL) {
@@ -30,6 +33,9 @@ app.use('/users', userRoutes);
 app.get('/', (_, res) => {
   res.send('working');
 });
+
+// subscribe to sites topic
+subscribeToTopic();
 
 // seeding Camunda Engine with 3 users
 seed();

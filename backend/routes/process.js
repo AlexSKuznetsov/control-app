@@ -86,13 +86,5 @@ router.post('/complete-task', async (req, res) => {
   }
 });
 
-router.post('/get-sites', (req, res) => {
-  // Extract the new topic name from the webhook payload
-  const newTopicName = req.body.topicName;
-
-  subscribeToTopic(newTopicName);
-
-  res.status(200).send(`Notification topic name was changed to: ${newTopicName}`);
-})
 
 export default router;

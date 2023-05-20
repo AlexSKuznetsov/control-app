@@ -1,26 +1,8 @@
 import axios from 'axios';
 import { BASE_URL } from './config.js';
 import { seedSitesList } from './controllers/processController.js'
+import { MOCK_USER_LIST } from './mocks/users.js'
 
-const MOCK_USER_LIST = [
-  {
-    id: 'admin',
-    firstName: 'Admin',
-    lastName: 'admin',
-    password: 'admin',
-    email: 'admin@xxxx.com',
-  },
-  {
-    id: 'manager',
-    firstName: 'John',
-    password: 'manager',
-  },
-  {
-    id: 'employee',
-    firstName: 'Rick',
-    password: 'employee',
-  },
-];
 
 const getCurrentUserList = async () => {
   try {
@@ -80,7 +62,6 @@ const seed = async () => {
     return;
   } else {
     await createNewUsers();
-
     console.log('New users created.');
   }
 };
