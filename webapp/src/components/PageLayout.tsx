@@ -6,7 +6,7 @@ type PropsType = {
 
 export const PageLayout: React.FC<PropsType> = ({ children }) => {
   return (
-    <Paper elevation={1} className='h-[calc(100vh-105px)] m-4'>
+    <Paper elevation={1} className='m-4 h-[calc(100vh-105px)]'>
       {children}
     </Paper>
   );

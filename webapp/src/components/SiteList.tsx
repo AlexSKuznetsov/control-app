@@ -1,34 +1,32 @@
-import { useQuery } from '@tanstack/react-query';
-import { Container, List, ListItem, ListItemText } from '@mui/material';
-import { getSitesList } from '../api/sitesApi';
-import { QUERY_KEYS } from '../shared/constants';
+import { List, ListItem, ListItemText } from '@mui/material';
+import PlaceIcon from '@mui/icons-material/Place';
+import { useSitesList } from '../hooks/useSitesList';
 import { Progress } from '.';
 
 export const SiteList = () => {
-  const {
-    data: siteList,
-    isLoading,
-    error,
-  } = useQuery({
-    queryFn: getSitesList,
-    queryKey: [QUERY_KEYS.GET_SITES_LIST],
-  });
+  const { siteList, isLoading, error } = useSitesList();
 
   if (error) {
     return null;
   }
 
   return (
-    <Container>
+    <>
+      <p className='ml-2 text-xs text-slate-400'>stored in MongoDB</p>
       {isLoading && <Progress />}
       <List sx={{ width: '100%', maxWidth: 360 }}>
         {siteList &&
           siteList.map((siteName) => (
-            <ListItem key={siteName}>
-              <ListItemText primary={siteName} />
+            <ListItem key={siteName} alignItems='center'>
+              <PlaceIcon color='action' />
+              <ListItemText
+                primary={
+                  <p className='ml-2 text-xs text-slate-600'>{siteName}</p>
+                }
+              />
             </ListItem>
           ))}
       </List>
-    </Container>
+    </>
   );
 };

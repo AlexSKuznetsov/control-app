@@ -1,7 +1,7 @@
 import { FC, useState, useCallback } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { toast } from 'react-toastify';
+
 import {
   Table,
   TableBody,
@@ -11,12 +11,12 @@ import {
   TableRow,
   Paper,
   Button,
-  Drawer,
 } from '@mui/material';
 import ModeIcon from '@mui/icons-material/Mode';
 import { QUERY_KEYS } from '../shared/constants';
-import { getEmployeeTasks, completeTask } from '../api/processApi';
-import { Progress } from '.';
+import { useCompleteTask } from '../hooks/useCompleteTask';
+import { useGetEmployeeTask } from '../hooks/useGetEmployeeTask';
+import { Progress, TaskDrawer } from '.';
 
 export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
   viewType,
@@ -25,10 +25,8 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [taskId, setTaskId] = useState('');
 
-  const { mutate } = useMutation({
-    mutationFn: completeTask,
-    onError: () => toast('Something whent wrong', { type: 'warning' }),
-  });
+  const { mutate } = useCompleteTask();
+  const { data, isLoading } = useGetEmployeeTask();
 
   const handleCompleteTask = useCallback(
     (isCompleted: boolean) => {
@@ -42,12 +40,6 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
     },
     [taskId, isOpen]
   );
-
-  const { data, isLoading } = useQuery({
-    queryKey: [QUERY_KEYS.GET_EMPLOYEE_TASKS],
-    queryFn: getEmployeeTasks,
-    onError: () => toast('Error loading task list', { type: 'warning' }),
-  });
 
   return (
     <>
@@ -103,32 +95,12 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
           There are no currently task avaliable for this user
         </div>
       )}
-      <Drawer open={isOpen} onClose={() => setIsOpen(false)} anchor='right'>
-        <div className='w-[600px] m-4 flex flex-col h-full'>
-          <div className='grow'>Some data from Mongo DB</div>
-          <div className='text-end mb-2'>
-            {viewType === 'manager' && (
-              <Button
-                color='error'
-                variant='contained'
-                onClick={() => handleCompleteTask(false)}
-                sx={{
-                  marginRight: '10px',
-                }}
-              >
-                Reject
-              </Button>
-            )}
-            <Button
-              color={viewType === 'employee' ? 'primary' : 'success'}
-              variant='contained'
-              onClick={() => handleCompleteTask(true)}
-            >
-              {viewType === 'manager' ? 'Approve task' : 'Complete task'}
-            </Button>
-          </div>
-        </div>
-      </Drawer>
+      <TaskDrawer
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        viewType={viewType}
+        handleCompleteTask={handleCompleteTask}
+      />
     </>
   );
 };

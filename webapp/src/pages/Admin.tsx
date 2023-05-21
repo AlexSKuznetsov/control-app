@@ -79,7 +79,7 @@ export const AdminPage = () => {
   if (processDefinitionData?.length) {
     return (
       <PageLayout>
-        <div className='grid grid-cols-2 grid-rows-2 gap-12'>
+        <div className='grid grid-cols-2 grid-rows-2 gap-1'>
           <div className='m-2 p-4 border inline-block rounded shadow'>
             <p className='text-lg font-light mx-2 text-slate-600'>
               Deployed process list:

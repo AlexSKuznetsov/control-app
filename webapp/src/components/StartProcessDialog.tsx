@@ -15,10 +15,8 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { isEmpty } from 'lodash';
-import { useQuery } from '@tanstack/react-query';
-import { getSitesList } from '../api/sitesApi';
-import { QUERY_KEYS } from '../shared/constants';
+import { isEmpty, isUndefined } from 'lodash';
+import { useSitesList } from '../hooks/useSitesList';
 import { useEffect } from 'react';
 
 export type DialogProps = {
@@ -32,7 +30,7 @@ export type DialogProps = {
   setFullSiteList: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const SimpleDialog = (props: DialogProps) => {
+export const StartProcessDialog = (props: DialogProps) => {
   const {
     onClose,
     site,
@@ -44,14 +42,11 @@ export const SimpleDialog = (props: DialogProps) => {
     setFullSiteList,
   } = props;
 
-  const { data: siteList } = useQuery({
-    queryFn: getSitesList,
-    queryKey: [QUERY_KEYS.GET_SITES_LIST],
-  });
+  const { siteList } = useSitesList();
 
   useEffect(() => {
-    if (siteList !== undefined) {
-      setFullSiteList(siteList?.join(', ') as string);
+    if (!isUndefined(siteList)) {
+      setFullSiteList(siteList.join(', ') as string);
     }
   }, [siteList]);
 
@@ -109,7 +104,9 @@ export const SimpleDialog = (props: DialogProps) => {
               </Typography>
               <TextField
                 id='outlined-basic'
-                label='Enter a reason'
+                label={
+                  <span className='text-sm text-slate-500'>Enter a reason</span>
+                }
                 variant='outlined'
                 size='small'
                 value={adHocDescription}
@@ -121,13 +118,15 @@ export const SimpleDialog = (props: DialogProps) => {
                     ? 'Pick a site and write a reason for ad-hoc process'
                     : undefined
                 }
-                placement='top-start'
+                placement='bottom'
+                arrow
               >
-                <span style={{ width: '100%', display: 'grid' }}>
+                <span>
                   <Button
                     variant='contained'
                     disabled={!isSiteChosen}
                     onClick={() => onClose(`manual`)}
+                    fullWidth
                   >
                     Start ad-hoc process
                   </Button>

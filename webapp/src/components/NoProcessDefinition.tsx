@@ -4,8 +4,8 @@ import { PageLayout } from '.';
 export const NoProcessDefinition = () => {
   return (
     <PageLayout>
-      <div className='flex items-center justify-center h-full'>
-        <div className='inline-block font-bold text-md my-12 mx-6 bg-slate-100 p-2 rounded shadow'>
+      <div className='flex h-full items-center justify-center'>
+        <div className='text-md mx-6 my-12 inline-block rounded bg-slate-100 p-2 font-bold shadow'>
           <p> There are no processes uploaded to Caumunda Engine.</p>
           Please use{' '}
           <Link
@@ -17,7 +17,7 @@ export const NoProcessDefinition = () => {
             Camunda modeler
           </Link>{' '}
           for uploading new process.
-          <p className='text-sm font-normal mt-4'>
+          <p className='mt-4 text-sm font-normal'>
             Rest endpoint: http://localhost:8080/engine-rest
           </p>
         </div>

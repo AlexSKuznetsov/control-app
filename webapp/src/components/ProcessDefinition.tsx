@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { SimpleDialog } from './StartProcessDialog';
+import { StartProcessDialog } from './StartProcessDialog';
 import { ProcessDefinition } from '../types/processDefinition';
 import { Button } from '@mui/material';
 
@@ -48,12 +48,12 @@ export const ProcessDefinitionElement: React.FC<PropsType> = ({
 
   return (
     <div className='p-2'>
-      <div className='flex items-center gap-12 justify-between'>
+      <div className='flex items-center justify-between gap-12'>
         <div>
           <h2 className='font-semibold text-slate-900'>
             {processDefinition.name ?? 'Noname'}
           </h2>
-          <div className='flex gap-2 font-light text-slate-500 text-xs'>
+          <div className='flex gap-2 text-xs font-light text-slate-500'>
             <div>
               <span>key: </span>
               <span>{processDefinition.key}</span>
@@ -69,11 +69,11 @@ export const ProcessDefinitionElement: React.FC<PropsType> = ({
           </div>
         </div>
 
-        <Button variant='contained' onClick={handleClickOpen}>
+        <Button variant='contained' onClick={handleClickOpen} size='small'>
           Start instance
         </Button>
       </div>
-      <SimpleDialog
+      <StartProcessDialog
         site={site}
         open={open}
         setOpen={setOpen}

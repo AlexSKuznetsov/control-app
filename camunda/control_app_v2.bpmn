@@ -10,7 +10,7 @@
     <bpmn:startEvent id="StartEvent_1" name="Montly start process&#10;">
       <bpmn:outgoing>Flow_0jj1epu</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_17ss5zq">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P30D</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P1M</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:startEvent>
     <bpmn:exclusiveGateway id="Gateway_1fz32l5">
