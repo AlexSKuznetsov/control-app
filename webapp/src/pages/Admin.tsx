@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import {
   getProcessDefinition,
@@ -11,6 +10,7 @@ import {
   ProcessDefinitionElement,
   NotificationSettings,
   UserSettings,
+  NoProcessDefinition,
 } from '../components';
 import { QUERY_KEYS } from '../shared/constants';
 
@@ -44,12 +44,18 @@ export const AdminPage = () => {
   });
 
   const startProcessInstance = useCallback(
-    (processKey: string) => {
+    (
+      processKey: string,
+      sites: string,
+      startType: 'manual' | 'auto',
+      adHocDescription: string
+    ) => {
       mutate({
         processKey,
         variables: JSON.stringify({
-          siteList: { value: 'Site 1', type: 'String' },
-          startEventType: { value: 'manual', type: 'String' },
+          siteList: { value: sites, type: 'String' },
+          startEventType: { value: startType, type: 'String' },
+          adHocDescription: { value: adHocDescription, type: 'String' },
         }),
       });
     },
@@ -89,26 +95,5 @@ export const AdminPage = () => {
     );
   }
 
-  return (
-    <PageLayout>
-      <div className='flex items-center justify-center h-full'>
-        <div className='inline-block font-bold text-md my-12 mx-6 bg-slate-100 p-2 rounded shadow'>
-          <p> There are no processes uploaded to Caumunda Engine.</p>
-          Please use{' '}
-          <Link
-            to={'https://camunda.com/download/modeler'}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='text-blue-600 hover:underline'
-          >
-            Camunda modeler
-          </Link>{' '}
-          for uploading new process.
-          <p className='text-sm font-normal mt-4'>
-            Rest endpoint: http://localhost:8080/engine-rest
-          </p>
-        </div>
-      </div>
-    </PageLayout>
-  );
+  return <NoProcessDefinition />;
 };

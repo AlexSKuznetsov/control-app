@@ -15,34 +15,50 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
 import { isEmpty } from 'lodash';
 import { useQuery } from '@tanstack/react-query';
 import { getSitesList } from '../api/sitesApi';
 import { QUERY_KEYS } from '../shared/constants';
+import { useEffect } from 'react';
 
 export type DialogProps = {
   open: boolean;
-  selectedValue: string;
-  onClose: (value: string) => void;
-  onClick: () => void;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  site: string;
+  onClose: (startType: 'manual' | 'auto') => void;
+  setSite: React.Dispatch<React.SetStateAction<string>>;
+  adHocDescription: string;
+  setAdHocDescription: React.Dispatch<React.SetStateAction<string>>;
+  setFullSiteList: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const SimpleDialog = (props: DialogProps) => {
-  const { onClose, selectedValue, open, onClick } = props;
+  const {
+    onClose,
+    site,
+    open,
+    setSite,
+    adHocDescription,
+    setAdHocDescription,
+    setOpen,
+    setFullSiteList,
+  } = props;
 
-  const { data } = useQuery({
+  const { data: siteList } = useQuery({
     queryFn: getSitesList,
     queryKey: [QUERY_KEYS.GET_SITES_LIST],
   });
 
-  const [inputValue, setInputValue] = useState<string>('');
-  const [site, setSite] = useState('');
+  useEffect(() => {
+    if (siteList !== undefined) {
+      setFullSiteList(siteList?.join(', ') as string);
+    }
+  }, [siteList]);
 
-  const isSiteChosen = !isEmpty(inputValue) && !isEmpty(site);
+  const isSiteChosen = !isEmpty(adHocDescription) && !isEmpty(site);
 
   const handleClose = () => {
-    onClose(selectedValue);
+    setOpen(false);
   };
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -70,7 +86,7 @@ export const SimpleDialog = (props: DialogProps) => {
               </Typography>
               <FormControl fullWidth>
                 <InputLabel id='select-id'>Select a site:</InputLabel>
-                {data && (
+                {siteList && (
                   <Select
                     labelId='select-id'
                     id='select-id'
@@ -78,9 +94,9 @@ export const SimpleDialog = (props: DialogProps) => {
                     label='Select a site'
                     onChange={handleChange}
                   >
-                    {data.map((el) => (
-                      <MenuItem value={el} key={el}>
-                        {el}
+                    {siteList.map((siteName) => (
+                      <MenuItem value={siteName} key={siteName}>
+                        {siteName}
                       </MenuItem>
                     ))}
                   </Select>
@@ -96,12 +112,14 @@ export const SimpleDialog = (props: DialogProps) => {
                 label='Enter a reason'
                 variant='outlined'
                 size='small'
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                value={adHocDescription}
+                onChange={(e) => setAdHocDescription(e.target.value)}
               />
               <Tooltip
                 title={
-                  !isSiteChosen ? 'Pick a site and write a reason' : undefined
+                  !isSiteChosen
+                    ? 'Pick a site and write a reason for ad-hoc process'
+                    : undefined
                 }
                 placement='top-start'
               >
@@ -109,14 +127,16 @@ export const SimpleDialog = (props: DialogProps) => {
                   <Button
                     variant='contained'
                     disabled={!isSiteChosen}
-                    onClick={onClick}
+                    onClick={() => onClose(`manual`)}
                   >
                     Start ad-hoc process
                   </Button>
                 </span>
               </Tooltip>
 
-              <Button variant='outlined'>Start planned process</Button>
+              <Button variant='outlined' onClick={() => onClose('auto')}>
+                Start planned process
+              </Button>
             </Stack>
           </Stack>
         </DialogContent>

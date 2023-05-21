@@ -1,11 +1,16 @@
-import { useCallback, useState } from 'react';
+import { useState, useCallback } from 'react';
 import { SimpleDialog } from './StartProcessDialog';
 import { ProcessDefinition } from '../types/processDefinition';
 import { Button } from '@mui/material';
 
 type PropsType = {
   processDefinition: ProcessDefinition;
-  onButtonClick: (processKey: string) => void;
+  onButtonClick: (
+    processKey: string,
+    sites: string,
+    startType: 'manual' | 'auto',
+    adHocDescription: string
+  ) => void;
 };
 
 export const ProcessDefinitionElement: React.FC<PropsType> = ({
@@ -13,20 +18,33 @@ export const ProcessDefinitionElement: React.FC<PropsType> = ({
   processDefinition,
 }) => {
   const [open, setOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState('');
+  const [site, setSite] = useState('');
+  const [adHocDescription, setAdHocDescription] = useState('');
+  const [fullSiteList, setFullSiteList] = useState('');
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = (value: string) => {
-    setOpen(false);
-    setSelectedValue(value);
+  const handleClearState = () => {
+    setSite('');
+    setAdHocDescription('');
   };
 
-  const onClick = useCallback(() => {
-    onButtonClick(processDefinition.key as string);
-  }, [processDefinition]);
+  const handleClose = useCallback(
+    (startType: 'manual' | 'auto') => {
+      onButtonClick(
+        processDefinition.key as string,
+        startType === 'manual' ? site : fullSiteList,
+        startType,
+        adHocDescription
+      );
+
+      setOpen(false);
+      handleClearState();
+    },
+    [site, processDefinition, onButtonClick, adHocDescription, handleClearState]
+  );
 
   return (
     <div className='p-2'>
@@ -56,10 +74,14 @@ export const ProcessDefinitionElement: React.FC<PropsType> = ({
         </Button>
       </div>
       <SimpleDialog
-        selectedValue={selectedValue}
+        site={site}
         open={open}
+        setOpen={setOpen}
         onClose={handleClose}
-        onClick={onClick}
+        setSite={setSite}
+        adHocDescription={adHocDescription}
+        setAdHocDescription={setAdHocDescription}
+        setFullSiteList={setFullSiteList}
       />
     </div>
   );
