@@ -15,7 +15,7 @@
       "error",
       "ignorePackages",
       {
-        "js": "never",
+        // "js": "never",
         "mjs": "never",
         "jsx": "never",
         "ts": "never",

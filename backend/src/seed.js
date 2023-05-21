@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { BASE_URL } from './config.js';
-import { seedSitesList } from './controllers/processController.js'
+import { seedSitesList } from './controllers/seedController.js'
 import { MOCK_USER_LIST } from './mocks/users.js'
 
 
@@ -15,12 +15,14 @@ const getCurrentUserList = async () => {
 
 const createNewUsers = async () => {
   try {
+    // creating a special SYSTEM group for admin
     await axios.post(`${BASE_URL}/group/create`, {
       id: 'camunda-admin',
       name: 'camunda BPM Administrators',
       type: 'SYSTEM',
     });
 
+    // creating users
     MOCK_USER_LIST.forEach(async (user) => {
       await axios.post(`${BASE_URL}/user/create`, {
         profile: {
@@ -35,10 +37,14 @@ const createNewUsers = async () => {
       });
     });
 
+    // waiting until users and groups created 
     setTimeout(async () => {
+      // add admin to special group
       await axios.put(`${BASE_URL}/group/camunda-admin/members/admin`);
 
-      for (let i = 0; i <= 17; i++) {
+      // the are 21 resources that might be granted to user, so we give to Admin all on them
+      // https://docs.camunda.org/manual/develop/user-guide/process-engine/authorization-service/#resources
+      for (let i = 0; i <= 21; i++) {
         await axios.post(`${BASE_URL}/authorization/create`, {
           type: 1,
           permissions: ['ALL'],
@@ -55,12 +61,14 @@ const createNewUsers = async () => {
 };
 
 const seed = async () => {
-  const camundaUserList = await getCurrentUserList();
+  // seeding sites
   await seedSitesList()
+
+  const camundaUserList = await getCurrentUserList();
   if (camundaUserList && camundaUserList.length > 0) {
     console.log('Camunda already have users');
-    return;
   } else {
+    // seeding users
     await createNewUsers();
     console.log('New users created.');
   }

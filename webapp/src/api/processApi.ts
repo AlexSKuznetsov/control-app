@@ -44,10 +44,7 @@ export const startNewInstanceByProcessKey = async (
   try {
     const response = await axios.post(
       `${BACKEND_BASE_URL}/process/start-process`,
-      {
-        processKey,
-        variables,
-      }
+      { processKey, variables }
     );
 
     return response.data;
@@ -58,29 +55,29 @@ export const startNewInstanceByProcessKey = async (
 };
 
 type Task = {
-  assignee: string | null;
-  camundaFormRef: { [key: string]: string } | null;
-  caseDefinitionId: string | null;
-  caseExecutionId: string | null;
-  caseInstanceId: string | null;
-  created: string | null;
-  delegationState: string | null;
-  description: string | null;
-  due: string | null;
-  executionId: string | null;
-  followUp: string | null;
-  formKey: string | null;
-  id: string | null;
-  lastUpdated: string | null;
-  name: string | null;
-  owner: string | null;
-  parentTaskId: string | null;
-  priority: number | null;
-  processDefinitionId: string | null;
-  processInstanceId: string | null;
-  suspended: boolean | null;
-  taskDefinitionKey: string | null;
-  tenantId: string | null;
+  _id: string;
+  payload: {
+    checkList: [{ [key: string]: boolean }];
+  };
+  processId: string;
+  variables: {
+    variables: {
+      siteList: {
+        value: string;
+        type: string;
+      };
+      startEventType: {
+        value: string;
+        type: string;
+      };
+      adHocDescription: {
+        value: string;
+        type: string;
+      };
+    };
+  };
+  status: string;
+  timestamp: string;
 };
 
 export const getEmployeeTasks = async () => {

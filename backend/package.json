@@ -33,6 +33,7 @@
     "eslint-config-node": "^4.1.0",
     "eslint-plugin-import": "^2.27.5",
     "nodemon": "^2.0.22",
+    "prettier": "2.8.8",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   }

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import axios from 'axios';
 import { BASE_URL } from '../config.js';
-import { createProcessPayload } from '../controllers/processController.js';
+import { createProcessPayload, getProcessList } from '../controllers/processController.js';
 
 const router = Router();
 
@@ -18,7 +18,7 @@ router.get('/process-definition', async (req, res) => {
 router.post('/start-process', async (req, res) => {
   const processKey = req.body.processKey;
   const variables = req.body.variables;
-  console.log('>>>', variables)
+
   if (!processKey) {
     return res.status(400).send('Proscess key missed');
   }
@@ -64,8 +64,8 @@ router.get('/deployment', async (req, res) => {
 
 router.get('/get-tasks', async (req, res) => {
   try {
-    const response = await axios.get(`${BASE_URL}/task`);
-    res.send(response.data);
+    const result = await getProcessList();
+    res.send(result)
   } catch (error) {
     console.log(error);
   }

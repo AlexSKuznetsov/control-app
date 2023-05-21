@@ -30,6 +30,9 @@ services:
       - PORT=5000
       - CAMUNDA_API_BASE_URL=http://camunda:8080/engine-rest
       - MONGODB_URL=mongodb:27017
+      - DB_NAME=control-app
+      - SITE_COLLECTION=sites
+      - PROCESSES_COLLECTION=processes
     depends_on:
       - camunda
       - mongodb

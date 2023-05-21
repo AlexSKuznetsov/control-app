@@ -11,7 +11,8 @@ export const SiteList = () => {
   }
 
   return (
-    <>
+    <div className='m-2 inline-block rounded border p-4 shadow'>
+      <p className='mx-2 text-lg font-light text-slate-600'>Site list:</p>
       <p className='ml-2 text-xs text-slate-400'>stored in MongoDB</p>
       {isLoading && <Progress />}
       <List sx={{ width: '100%', maxWidth: 360 }}>
@@ -27,6 +28,6 @@ export const SiteList = () => {
             </ListItem>
           ))}
       </List>
-    </>
+    </div>
   );
 };

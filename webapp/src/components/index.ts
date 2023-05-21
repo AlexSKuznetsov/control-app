@@ -10,3 +10,4 @@ export { NoProcessDefinition } from './NoProcessDefinition';
 export { Progress } from './Progress';
 export { SiteList } from './SiteList';
 export { TaskDrawer } from './TaskDrawer';
+export { ProcessList } from './ProcessList';

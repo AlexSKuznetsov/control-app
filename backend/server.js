@@ -4,18 +4,19 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 
 // config
-import { BASE_URL, PORT, ENV } from './config.js';
+import { BASE_URL, PORT, ENV } from './src/config.js';
 
 // camunda users seed
-import seed from './seed.js';
+import seed from './src/seed.js';
 
 // routes
-import processRoutes from './routes/process.js';
-import userRoutes from './routes/users.js';
-import sitesRoutes from './routes/sites.js';
+import processRoutes from './src/routes/process.js';
+import userRoutes from './src/routes/users.js';
+import sitesRoutes from './src/routes/sites.js';
 
-//constollers
-import { subscribeToTopic } from './controllers/processController.js'
+
+// services
+import { subscribeToGetSites } from './src/services/getSitesTopic.js'
 
 const app = express();
 
@@ -37,7 +38,8 @@ app.get('/', (_, res) => {
 });
 
 // subscribe to sites topic
-subscribeToTopic();
+subscribeToGetSites();
+
 
 // seeding Camunda Engine with 3 users
 seed();

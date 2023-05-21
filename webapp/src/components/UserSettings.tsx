@@ -34,12 +34,10 @@ export const UserSettings = () => {
                 <PersonIcon color='primary' fontSize='small' />
                 <ListItemText
                   primary={
-                    <p className='ml-2 text-sm font-semibold text-slate-600 '>
-                      {el.id}
-                    </p>
+                    <p className='ml-2 text-sm  text-slate-900'>{el.id}</p>
                   }
                   secondary={
-                    <div className='ml-2 text-xs text-slate-500'>
+                    <div className='ml-2 text-xs font-thin text-slate-500'>
                       <p>
                         First name: {el.firstName}, Last name: {el.lastName}
                       </p>

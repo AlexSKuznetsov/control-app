@@ -1,6 +1,6 @@
 import { FC, useState, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 import {
   Table,
@@ -11,6 +11,7 @@ import {
   TableRow,
   Paper,
   Button,
+  Chip,
 } from '@mui/material';
 import ModeIcon from '@mui/icons-material/Mode';
 import { QUERY_KEYS } from '../shared/constants';
@@ -45,12 +46,12 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
     <>
       {isLoading && <Progress />}
 
-      {data && data.filter((el) => el.assignee === viewType).length > 0 ? (
+      {data && data.length > 0 ? (
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label='simple table'>
+          <Table sx={{ minWidth: 650 }} size='small'>
             <TableHead>
               <TableRow>
-                <TableCell>Taskname</TableCell>
+                <TableCell>Task name</TableCell>
                 <TableCell align='right'>Start time</TableCell>
                 <TableCell align='right'>Status</TableCell>
                 <TableCell align='right'>Edit</TableCell>
@@ -58,19 +59,48 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
             </TableHead>
             <TableBody>
               {data
-                .filter((el) => el.assignee === viewType)
-                .map((row: any) => (
+                .filter(
+                  (el) => viewType === 'employee' && el.status === 'in progress'
+                )
+                .map((row) => (
                   <TableRow
-                    key={row.id}
+                    key={row._id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component='th' scope='row'>
-                      {row.name}
+                      {row.variables.variables.startEventType.value ===
+                      'manual' ? (
+                        <span className='text-xs text-slate-600'>
+                          Ad hoc request, reason -{' '}
+                          <span className='font-semibold'>
+                            {row.variables.variables.adHocDescription.value}.
+                          </span>{' '}
+                          Fill {row.variables.variables.siteList.value}{' '}
+                          inspection checklist report.
+                        </span>
+                      ) : (
+                        <span className='text-xs text-slate-600'>
+                          Planned request May 2023 - Fill sitename inspection
+                          checklist report.
+                        </span>
+                      )}
                     </TableCell>
                     <TableCell align='right'>
-                      {format(new Date(row.created), 'MM/dd/yyyy')}
+                      <span className='text-xs text-slate-600'>
+                        {format(parseISO(row.timestamp), 'MM/dd/yyyy HH:mm')}
+                      </span>
                     </TableCell>
-                    <TableCell align='right'>{row.suspended}</TableCell>
+                    <TableCell align='right'>
+                      <Chip
+                        label={
+                          <span className='text-xs text-slate-600'>
+                            {row.status}
+                          </span>
+                        }
+                        variant='outlined'
+                        size='small'
+                      />
+                    </TableCell>
                     <TableCell align='right'>
                       {
                         <Button
@@ -78,7 +108,7 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
                           startIcon={<ModeIcon />}
                           onClick={() => {
                             setIsOpen(true);
-                            setTaskId(row.id);
+                            setTaskId(row._id);
                           }}
                         >
                           Edit

@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { MongoClient } from 'mongodb';
-import axios from 'axios';
 import { MONGODB_URL } from '../config.js';
 
 const uri = `mongodb://${MONGODB_URL}`; // Replace with your MongoDB server URI
