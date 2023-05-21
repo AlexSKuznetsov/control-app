@@ -16,7 +16,7 @@ export const MOCK_USER_LIST = [
   {
     id: 'employee',
     firstName: 'Rick',
-    lastName: 'Prorter',
+    lastName: 'Porter',
     password: 'employee',
     email: 'rick@example.com'
   },
