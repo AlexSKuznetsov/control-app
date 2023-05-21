@@ -11,6 +11,8 @@ import {
   NotificationSettings,
   UserSettings,
   NoProcessDefinition,
+  Progress,
+  SiteList,
 } from '../components';
 import { QUERY_KEYS } from '../shared/constants';
 
@@ -63,7 +65,11 @@ export const AdminPage = () => {
   );
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <PageLayout>
+        <Progress />
+      </PageLayout>
+    );
   }
 
   if (error) {
@@ -90,6 +96,10 @@ export const AdminPage = () => {
           </div>
           <NotificationSettings />
           <UserSettings />
+          <div className='m-2 p-4 border inline-block rounded shadow'>
+            <p className='text-lg font-light mx-2 text-slate-600'>Site list:</p>
+            <SiteList />
+          </div>
         </div>
       </PageLayout>
     );

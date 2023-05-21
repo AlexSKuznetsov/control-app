@@ -4,6 +4,15 @@ import { isEmpty } from 'lodash';
 import { QUERY_KEYS } from '../shared/constants';
 import { getUserList } from '../api/userApi';
 import { toast } from 'react-toastify';
+import {
+  Container,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from '@mui/material';
+import { Progress } from '.';
+import React from 'react';
 
 export const UserSettings = () => {
   const { data, isLoading } = useQuery({
@@ -22,19 +31,29 @@ export const UserSettings = () => {
   return (
     <div className='m-2 p-4 border inline-block rounded shadow'>
       <span className='text-lg font-light mx-2 text-slate-600'>
-        User settings:
+        User list:
         {!isEmpty(data) ? (
-          data?.map((user) => (
-            <div
-              key={user.id}
-              className='flex text-xs gap-4 text-slate-600 ml-2 mt-2'
-            >
-              <span>User ID: {user.id}</span>
-              <span>First name: {user.firstName}</span>
-              <span>Last name: {user.lastName}</span>
-              <span>Email: {user.email || 'none'}</span>
-            </div>
-          ))
+          <List sx={{ width: '100%', maxWidth: 360 }}>
+            {data?.map((el) => (
+              <ListItem key={el.id}>
+                <ListItemText
+                  primary={el.id}
+                  secondary={
+                    <React.Fragment>
+                      <Typography
+                        sx={{ display: 'inline' }}
+                        component='span'
+                        variant='body2'
+                        color='text.primary'
+                      >
+                        {el.firstName} | {el.lastName} | {el.email}
+                      </Typography>
+                    </React.Fragment>
+                  }
+                />
+              </ListItem>
+            ))}
+          </List>
         ) : (
           <div className='flex items-center pt-2 justify-between'>
             <p className='text-sm mx-2'>No users</p>
@@ -46,7 +65,7 @@ export const UserSettings = () => {
             </button>
           </div>
         )}
-        {isLoading && <div>loading ...</div>}
+        {isLoading && <Progress />}
       </span>
     </div>
   );

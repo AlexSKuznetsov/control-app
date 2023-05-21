@@ -1,4 +1,4 @@
-import { FC, useMemo, useState, useCallback } from 'react';
+import { FC, useState, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify';
@@ -10,14 +10,13 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Box,
-  Skeleton,
   Button,
   Drawer,
 } from '@mui/material';
 import ModeIcon from '@mui/icons-material/Mode';
 import { QUERY_KEYS } from '../shared/constants';
 import { getEmployeeTasks, completeTask } from '../api/processApi';
+import { Progress } from '.';
 
 export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
   viewType,
@@ -50,19 +49,9 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
     onError: () => toast('Error loading task list', { type: 'warning' }),
   });
 
-  const renderLoadingTableSkeleton = useMemo(() => {
-    return (
-      <Box sx={{ minWidth: 650 }}>
-        {Array(10).map((_, i) => (
-          <Skeleton key={i} />
-        ))}
-      </Box>
-    );
-  }, []);
-
   return (
     <>
-      {isLoading && renderLoadingTableSkeleton}
+      {isLoading && <Progress />}
 
       {data && data.filter((el) => el.assignee === viewType).length > 0 ? (
         <TableContainer component={Paper}>
