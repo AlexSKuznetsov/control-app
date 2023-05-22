@@ -4,19 +4,19 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 
 // config
-import { BASE_URL, PORT, ENV } from './src/config.js';
+import { BASE_URL, PORT, ENV } from './config.js';
 
 // camunda users seed
-import seed from './src/seed.js';
+import seed from './seed.js';
 
 // routes
-import processRoutes from './src/routes/process.js';
-import userRoutes from './src/routes/users.js';
-import sitesRoutes from './src/routes/sites.js';
+import processRoutes from './routes/process.js';
+import userRoutes from './routes/users.js';
+import sitesRoutes from './routes/sites.js';
 
 
 // services
-import { subscribeToGetSites } from './src/services/getSitesTopic.js'
+import { subscribeToGetSites } from './services/getSitesTopic.js'
 
 const app = express();
 

@@ -3,17 +3,14 @@ FROM node:18-alpine3.17
 # Create app directory
 WORKDIR /usr/src/app
 
+# Copy package.json and source code
+COPY package*.json src/ /usr/src/app/
+
 # Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
-
 RUN npm install
-# If you are building your code for production
-# RUN npm ci --omit=dev
 
-# Bundle app source
-COPY . .
-
+# Expose the desired port
 EXPOSE 5000
-CMD [ "node", "server.js" ]
+
+# Set the command to start the application
+CMD [ "node", "src/server.js" ]
