@@ -6,4 +6,8 @@ export const QUERY_KEYS = {
   GET_SITES_LIST: 'GET_SITES_LIST',
 };
 
-export const BACKEND_BASE_URL = 'http://localhost:8081';
+export const BACKEND_BASE_URL = import.meta.env.DEV
+  ? 'http://localhost:6001'
+  : 'http://localhost:8081';
+
+console.log('MODE:', import.meta.env.MODE);
