@@ -128,4 +128,25 @@ export const modifyCheckList = async (taskId, checkList) => {
   }
 }
 
+export const modifyTaskId = async (prevTaskId, newTaskId) => {
+  try {
+    await client.connect();
 
+    const result = await collection.updateOne(
+      { taskId: prevTaskId },
+      {
+        $set: {
+          taskId: newTaskId,
+        }
+      },
+      { upsert: false }
+    )
+
+
+    return result;
+  } catch (e) {
+    console.log(e)
+  } finally {
+    await client.close();
+  }
+}

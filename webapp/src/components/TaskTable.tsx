@@ -56,7 +56,7 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
   );
 
   const pickedData = useMemo(() => {
-    return data?.find((el) => el.taskId === taskId);
+    return data && data?.find((el) => el.taskId === taskId);
   }, [taskId, data]);
 
   const showCellNames = useMemo(

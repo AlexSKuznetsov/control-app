@@ -8,7 +8,8 @@ import {
   getProcessInstanceTasks,
   modifyTaskStatus,
   modifyManagerTaskId,
-  modifyCheckList
+  modifyCheckList,
+  modifyTaskId
 } from '../controllers/processController.js';
 
 
@@ -124,7 +125,15 @@ router.post('/complete-task', async (req, res) => {
       })
 
       if (!isCompleted) {
-        await modifyManagerTaskId(taskId, managerTaskId, 'employee')
+        await modifyManagerTaskId(taskId, managerTaskId, 'employee');
+
+        // get next task id for employee
+        const { data } = await axios.post(`${BASE_URL}/task`, {
+          processInstanceId: processId,
+          assignee: 'employee'
+        })
+
+        await modifyTaskId(taskId, data[0].id);
       }
 
       res.send(response.data)
