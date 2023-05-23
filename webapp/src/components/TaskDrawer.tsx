@@ -1,10 +1,18 @@
-import { Button, Drawer } from '@mui/material';
+import {
+  Button,
+  Checkbox,
+  Drawer,
+  FormControlLabel,
+  FormGroup,
+} from '@mui/material';
+import { Task } from '../api/processApi';
 
 type PropsType = {
   isOpen: boolean;
   setIsOpen: (value: React.SetStateAction<boolean>) => void;
   viewType: 'employee' | 'manager';
   handleCompleteTask: (isCompleted: boolean) => void;
+  data: Task | undefined;
 };
 
 export const TaskDrawer: React.FC<PropsType> = ({
@@ -12,11 +20,26 @@ export const TaskDrawer: React.FC<PropsType> = ({
   setIsOpen,
   viewType,
   handleCompleteTask,
+  data,
 }) => {
   return (
     <Drawer open={isOpen} onClose={() => setIsOpen(false)} anchor='right'>
       <div className='m-4 flex h-full w-[600px] flex-col'>
-        <div className='grow'>Some data from Mongo DB</div>
+        <div className='grow'>
+          <p className='py-4'>
+            Fill sitename inspection checklist report for{' '}
+            {data?.taskVariables.siteName.value}
+          </p>
+          <FormGroup>
+            {data?.checkList.map((el) => (
+              <FormControlLabel
+                key={el.checkName}
+                control={<Checkbox />}
+                label={el.description}
+              />
+            ))}
+          </FormGroup>
+        </div>
         <div className='mb-2 text-end'>
           {viewType === 'manager' && (
             <Button

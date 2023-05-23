@@ -1,4 +1,4 @@
-import { FC, useState, useCallback } from 'react';
+import { FC, useState, useCallback, useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
 
@@ -42,6 +42,10 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
     [taskId, isOpen]
   );
 
+  const pickedData = useMemo(() => {
+    return data?.find((el) => el.taskId === taskId);
+  }, [taskId, data]);
+
   return (
     <>
       {isLoading && <Progress />}
@@ -52,6 +56,8 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
             <TableHead>
               <TableRow>
                 <TableCell>Task name</TableCell>
+                <TableCell align='right'>Start type</TableCell>
+                <TableCell align='right'>Site name</TableCell>
                 <TableCell align='right'>Start time</TableCell>
                 <TableCell align='right'>Status</TableCell>
                 <TableCell align='right'>Edit</TableCell>
@@ -59,8 +65,10 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
             </TableHead>
             <TableBody>
               {data
-                .filter(
-                  (el) => viewType === 'employee' && el.status === 'in progress'
+                .filter((el) =>
+                  viewType === 'employee'
+                    ? el.status === 'in progress'
+                    : el.status === 'in review'
                 )
                 .map((row) => (
                   <TableRow
@@ -68,22 +76,35 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component='th' scope='row'>
-                      {row.variables.variables.startEventType.value ===
+                      {row.proccesVariables.startEventType.value ===
                       'manual' ? (
                         <span className='text-xs text-slate-600'>
                           Ad hoc request, reason -{' '}
                           <span className='font-semibold'>
-                            {row.variables.variables.adHocDescription.value}.
+                            {row.proccesVariables.adHocDescription.value}.
                           </span>{' '}
-                          Fill {row.variables.variables.siteList.value}{' '}
-                          inspection checklist report.
+                          Fill {row.taskVariables.siteName.value} inspection
+                          checklist report.
                         </span>
                       ) : (
                         <span className='text-xs text-slate-600'>
                           Planned request May 2023 - Fill sitename inspection
-                          checklist report.
+                          checklist report for{' '}
+                          {JSON.parse(row.taskVariables.siteName.value)}.
                         </span>
                       )}
+                    </TableCell>
+                    <TableCell align='right'>
+                      <span className='text-xs text-slate-600'>
+                        {row.proccesVariables.startEventType.value === 'manual'
+                          ? 'ad-hoc'
+                          : 'regular'}
+                      </span>
+                    </TableCell>
+                    <TableCell align='right'>
+                      <span className='text-xs text-slate-600'>
+                        {JSON.parse(row.taskVariables.siteName.value)}
+                      </span>
                     </TableCell>
                     <TableCell align='right'>
                       <span className='text-xs text-slate-600'>
@@ -108,7 +129,7 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
                           startIcon={<ModeIcon />}
                           onClick={() => {
                             setIsOpen(true);
-                            setTaskId(row._id);
+                            setTaskId(row.taskId);
                           }}
                         >
                           Edit
@@ -130,6 +151,7 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
         setIsOpen={setIsOpen}
         viewType={viewType}
         handleCompleteTask={handleCompleteTask}
+        data={pickedData}
       />
     </>
   );

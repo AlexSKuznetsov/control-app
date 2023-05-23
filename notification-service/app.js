@@ -31,10 +31,6 @@ const client = new Client(config);
 
 const subscribeToTopic = (topicName) => {
   client.subscribe(topicName, async ({ task, taskService }) => {
-    // Put your business logic
-    // complete the task
-    console.log(task, taskService)
-
     await taskService.complete(task);
 
   });

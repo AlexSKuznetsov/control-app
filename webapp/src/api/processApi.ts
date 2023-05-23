@@ -54,30 +54,42 @@ export const startNewInstanceByProcessKey = async (
   }
 };
 
-type Task = {
+export type Task = {
   _id: string;
-  payload: {
-    checkList: [{ [key: string]: boolean }];
-  };
   processId: string;
-  variables: {
-    variables: {
-      siteList: {
-        value: string;
-        type: string;
-      };
-      startEventType: {
-        value: string;
-        type: string;
-      };
-      adHocDescription: {
-        value: string;
-        type: string;
-      };
+  taskId: string;
+  taskVariables: {
+    siteName: {
+      value: string;
+    };
+    adHocDescription: {
+      value: string;
+      type: string;
     };
   };
+  proccesVariables: {
+    siteList: {
+      value: string;
+      type: string;
+    };
+    startEventType: {
+      value: string;
+      type: string;
+    };
+    adHocDescription: {
+      value: string;
+      type: string;
+    };
+  };
+  assignee: string;
   status: string;
   timestamp: string;
+  checkList: [
+    {
+      checkName: string;
+      description: string;
+    }
+  ];
 };
 
 export const getEmployeeTasks = async () => {

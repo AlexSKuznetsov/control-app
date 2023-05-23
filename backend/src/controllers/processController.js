@@ -1,5 +1,6 @@
 import { MongoClient } from 'mongodb';
-import { MONGODB_URL, DB_NAME, PROCESSES_COLLECTION } from '../config.js';
+import axios from 'axios';
+import { MONGODB_URL, DB_NAME, PROCESSES_COLLECTION, BASE_URL } from '../config.js';
 
 
 const uri = `mongodb://${MONGODB_URL}`;
@@ -7,25 +8,10 @@ const client = new MongoClient(uri);
 const database = client.db(DB_NAME);
 const collection = database.collection(PROCESSES_COLLECTION);
 
-
-const payload = {
-  checkList: [
-    { task1: false },
-    { task2: false },
-    { task3: false },
-  ],
-};
-
-export const createProcessPayload = async (processId, variables) => {
+export const createProcessPayload = async (taskList) => {
   try {
     await client.connect();
-    const result = await collection.insertOne({
-      payload,
-      processId,
-      variables,
-      status: 'in progress',
-      timestamp: new Date(),
-    });
+    const result = await collection.insertMany(taskList);
     return result;
   } catch (error) {
     console.log(error);
@@ -37,13 +23,66 @@ export const createProcessPayload = async (processId, variables) => {
 export const getProcessList = async () => {
   try {
     await client.connect();
-    const result = await collection.find({ status: 'in progress' }).toArray()
+    const result = await collection.find().toArray()
     return result;
   } catch (e) {
     console.log(e)
   } finally {
     await client.close();
   }
+}
+
+export const startProcessInstance = async (processKey, variables) => {
+  try {
+    const processResponse = await axios.post(
+      `${BASE_URL}/process-definition/key/${processKey}/start`,
+      {
+        variables: JSON.parse(variables) || null,
+        businessKey: 'manualStart',
+      }
+    )
+
+    return processResponse.data;
+
+  } catch (e) {
+    console.log('Failed to start process instance with id:', processKey, e.message)
+  }
+}
+
+export const getProcessInstanceTasks = async (processInstanceId) => {
+  try {
+    const taskList = await axios.post(`${BASE_URL}/task`,
+      {
+        processInstanceId: processInstanceId
+      })
+
+    return taskList.data;
+  } catch (e) {
+    console.log('Failed to load process tasks', e.message)
+  }
+}
+
+export const modifyTaskStatus = async (taskId) => {
+  try {
+    await client.connect();
+    const result = await collection.updateOne(
+      { taskId },
+      {
+        $set: {
+          status: 'in review'
+        }
+      },
+      {
+        upsert: true,
+      }
+    )
+    return result;
+  } catch (e) {
+    console.log(e)
+  } finally {
+    await client.close();
+  }
+
 }
 
 
