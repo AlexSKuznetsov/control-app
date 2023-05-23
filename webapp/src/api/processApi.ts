@@ -54,10 +54,17 @@ export const startNewInstanceByProcessKey = async (
   }
 };
 
+export type CheckList = {
+  checkName: string;
+  description: string;
+  isCompleted: boolean;
+};
+
 export type Task = {
   _id: string;
   processId: string;
   taskId: string;
+  managerTaskId: string | null;
   taskVariables: {
     siteName: {
       value: string;
@@ -84,12 +91,7 @@ export type Task = {
   assignee: string;
   status: string;
   timestamp: string;
-  checkList: [
-    {
-      checkName: string;
-      description: string;
-    }
-  ];
+  checkList: CheckList[];
 };
 
 export const getEmployeeTasks = async () => {
@@ -107,9 +109,15 @@ export const getEmployeeTasks = async () => {
 export const completeTask = async ({
   id,
   isCompleted,
+  processId,
+  managerTaskId,
+  checkList,
 }: {
   id: string;
   isCompleted: boolean;
+  processId: string;
+  managerTaskId: string | null;
+  checkList: CheckList[] | null;
 }) => {
   try {
     const response = await axios.post(
@@ -117,6 +125,9 @@ export const completeTask = async ({
       {
         taskId: id,
         isCompleted,
+        processId,
+        managerTaskId,
+        checkList,
       }
     );
     return response.data;

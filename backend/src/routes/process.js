@@ -6,7 +6,9 @@ import {
   getProcessList,
   startProcessInstance,
   getProcessInstanceTasks,
-  modifyTaskStatus
+  modifyTaskStatus,
+  modifyManagerTaskId,
+  modifyCheckList
 } from '../controllers/processController.js';
 
 
@@ -42,21 +44,25 @@ router.post('/start-process', async (req, res) => {
             proccesVariables: JSON.parse(variables),
             status: 'in progress',
             taskId: task.id,
+            managerTaskId: null,
             taskVariables: taskVariables.data,
             assignee: task.assignee,
             timestamp: new Date(),
             checkList: [
               {
                 checkName: 'Check 1',
-                description: 'Make check 1'
+                description: 'Make check 1',
+                isCompleted: false
               },
               {
                 checkName: 'Check 2',
-                description: 'Make check 2'
+                description: 'Make check 2',
+                isCompleted: false,
               },
               {
                 checkName: 'Check 3',
-                description: 'Make check 3'
+                description: 'Make check 3',
+                isCompleted: false
               },
             ],
           }
@@ -104,15 +110,47 @@ router.get('/get-tasks', async (req, res) => {
 
 router.post('/complete-task', async (req, res) => {
   try {
-    const taskId = req.body.taskId;
+    const { taskId, processId, managerTaskId, isCompleted, checkList } = req.body;
 
+    // complete task by manager
+    if (managerTaskId !== null && managerTaskId !== undefined) {
+      const newStatus = isCompleted ? 'completed' : 'rejected';
+      await modifyTaskStatus(taskId, newStatus);
 
-    await modifyTaskStatus(taskId)
+      const response = await axios.post(`${BASE_URL}/task/${managerTaskId}/complete`, {
+        variables: {
+          checkListApprove: { value: isCompleted },
+        },
+      })
 
-    const response = await axios.post(`${BASE_URL}/task/${taskId}/complete`, {
+      if (!isCompleted) {
+        await modifyManagerTaskId(taskId, managerTaskId, 'employee')
+      }
 
-    });
-    res.send(response.data);
+      res.send(response.data)
+
+    } else {
+      // complete task by employee
+
+      // modify task status in DB
+      await modifyTaskStatus(taskId, 'in review');
+      await modifyCheckList(taskId, checkList)
+
+      // complete task
+      const response = await axios.post(`${BASE_URL}/task/${taskId}/complete`, {});
+
+      // get next task for manager
+      const { data } = await axios.post(`${BASE_URL}/task`, {
+        processInstanceId: processId,
+        assignee: 'manager'
+      })
+
+      // add manager task id in DB and change assignee
+      await modifyManagerTaskId(taskId, data[0].id, 'manager')
+
+      res.send(response.data);
+    }
+
   } catch (error) {
     console.log(error.message);
   }

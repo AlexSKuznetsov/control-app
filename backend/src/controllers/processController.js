@@ -62,18 +62,18 @@ export const getProcessInstanceTasks = async (processInstanceId) => {
   }
 }
 
-export const modifyTaskStatus = async (taskId) => {
+export const modifyTaskStatus = async (taskId, status) => {
   try {
     await client.connect();
     const result = await collection.updateOne(
       { taskId },
       {
         $set: {
-          status: 'in review'
+          status,
         }
       },
       {
-        upsert: true,
+        upsert: false,
       }
     )
     return result;
@@ -83,6 +83,49 @@ export const modifyTaskStatus = async (taskId) => {
     await client.close();
   }
 
+}
+
+export const modifyManagerTaskId = async (taskId, managerTaskId, assignee) => {
+  try {
+    await client.connect();
+    const result = await collection.updateOne(
+      { taskId },
+      {
+        $set: {
+          managerTaskId,
+          assignee,
+        }
+      },
+      { upsert: false }
+    )
+
+    return result;
+  } catch (e) {
+    console.log(e)
+  } finally {
+    await client.close();
+  }
+}
+
+export const modifyCheckList = async (taskId, checkList) => {
+  try {
+    await client.connect();
+    const result = await collection.updateOne(
+      { taskId },
+      {
+        $set: {
+          checkList,
+        }
+      },
+      { upsert: false }
+    )
+
+    return result;
+  } catch (e) {
+    console.log(e)
+  } finally {
+    await client.close();
+  }
 }
 
 

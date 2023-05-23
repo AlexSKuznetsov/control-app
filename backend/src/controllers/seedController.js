@@ -2,7 +2,6 @@ import { MongoClient } from 'mongodb';
 import { MONGODB_URL, DB_NAME, SITE_COLLECTION } from '../config.js';
 import { SITE_LIST } from '../mocks/sites.js'
 
-
 const uri = `mongodb://${MONGODB_URL}`;
 const client = new MongoClient(uri);
 const database = client.db(DB_NAME);

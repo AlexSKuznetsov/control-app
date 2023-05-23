@@ -1,7 +1,7 @@
 import { FC, useState, useCallback, useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
-
+import classNames from 'classnames';
 import {
   Table,
   TableBody,
@@ -15,9 +15,19 @@ import {
 } from '@mui/material';
 import ModeIcon from '@mui/icons-material/Mode';
 import { QUERY_KEYS } from '../shared/constants';
+import { CheckList } from '../api/processApi';
 import { useCompleteTask } from '../hooks/useCompleteTask';
 import { useGetEmployeeTask } from '../hooks/useGetEmployeeTask';
 import { Progress, TaskDrawer } from '.';
+
+const cellNames = [
+  'Task name',
+  'Start type',
+  'Site name',
+  'Start time',
+  'Status',
+  'Edit',
+];
 
 export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
   viewType,
@@ -25,13 +35,16 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const [taskId, setTaskId] = useState('');
+  const [processId, setProcessId] = useState('');
+  const [managerTaskId, setManagerTaskId] = useState<string | null>(null);
+  const [checkList, setCheckState] = useState<CheckList[] | null>(null);
 
   const { mutate } = useCompleteTask();
   const { data, isLoading } = useGetEmployeeTask();
 
   const handleCompleteTask = useCallback(
     (isCompleted: boolean) => {
-      mutate({ id: taskId, isCompleted });
+      mutate({ id: taskId, isCompleted, processId, managerTaskId, checkList });
       setIsOpen(false);
       setTimeout(() => {
         queryClient.invalidateQueries({
@@ -39,12 +52,22 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
         });
       }, 500);
     },
-    [taskId, isOpen]
+    [taskId, isOpen, checkList, processId, managerTaskId, checkList]
   );
 
   const pickedData = useMemo(() => {
     return data?.find((el) => el.taskId === taskId);
   }, [taskId, data]);
+
+  const showCellNames = useMemo(
+    () =>
+      cellNames.map((el) => (
+        <TableCell key={el} align={el === 'Task name' ? 'left' : 'right'}>
+          {el}
+        </TableCell>
+      )),
+    []
+  );
 
   return (
     <>
@@ -54,27 +77,17 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} size='small'>
             <TableHead>
-              <TableRow>
-                <TableCell>Task name</TableCell>
-                <TableCell align='right'>Start type</TableCell>
-                <TableCell align='right'>Site name</TableCell>
-                <TableCell align='right'>Start time</TableCell>
-                <TableCell align='right'>Status</TableCell>
-                <TableCell align='right'>Edit</TableCell>
-              </TableRow>
+              <TableRow>{showCellNames}</TableRow>
             </TableHead>
             <TableBody>
               {data
                 .filter((el) =>
                   viewType === 'employee'
-                    ? el.status === 'in progress'
+                    ? el.status === 'in progress' || el.status === 'rejected'
                     : el.status === 'in review'
                 )
                 .map((row) => (
-                  <TableRow
-                    key={row._id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
+                  <TableRow key={row._id}>
                     <TableCell component='th' scope='row'>
                       {row.proccesVariables.startEventType.value ===
                       'manual' ? (
@@ -114,11 +127,17 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
                     <TableCell align='right'>
                       <Chip
                         label={
-                          <span className='text-xs text-slate-600'>
+                          <span
+                            className={classNames('text-xs text-slate-600', {
+                              'text-red-600': row.status === 'rejected',
+                              'text-green-600': row.status === 'completed',
+                            })}
+                          >
                             {row.status}
                           </span>
                         }
                         variant='outlined'
+                        color={row.status === 'rejected' ? 'error' : 'default'}
                         size='small'
                       />
                     </TableCell>
@@ -130,6 +149,11 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
                           onClick={() => {
                             setIsOpen(true);
                             setTaskId(row.taskId);
+                            setProcessId(row.processId);
+                            setManagerTaskId(
+                              viewType === 'employee' ? null : row.managerTaskId
+                            );
+                            setCheckState(row.checkList);
                           }}
                         >
                           Edit
@@ -146,13 +170,18 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
           There are no currently task avaliable for this user
         </div>
       )}
-      <TaskDrawer
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        viewType={viewType}
-        handleCompleteTask={handleCompleteTask}
-        data={pickedData}
-      />
+
+      {pickedData && (
+        <TaskDrawer
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          viewType={viewType}
+          handleCompleteTask={handleCompleteTask}
+          data={pickedData}
+          checkList={checkList}
+          setCheckState={setCheckState}
+        />
+      )}
     </>
   );
 };

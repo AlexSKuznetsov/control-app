@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import {
   Button,
   Checkbox,
@@ -5,14 +6,16 @@ import {
   FormControlLabel,
   FormGroup,
 } from '@mui/material';
-import { Task } from '../api/processApi';
+import { CheckList, Task } from '../api/processApi';
 
 type PropsType = {
   isOpen: boolean;
   setIsOpen: (value: React.SetStateAction<boolean>) => void;
   viewType: 'employee' | 'manager';
   handleCompleteTask: (isCompleted: boolean) => void;
-  data: Task | undefined;
+  data: Task;
+  checkList: CheckList[] | null;
+  setCheckState: React.Dispatch<React.SetStateAction<CheckList[] | null>>;
 };
 
 export const TaskDrawer: React.FC<PropsType> = ({
@@ -21,7 +24,29 @@ export const TaskDrawer: React.FC<PropsType> = ({
   viewType,
   handleCompleteTask,
   data,
+  checkList,
+  setCheckState,
 }) => {
+  const handleCheckboxStateChanged = useCallback(
+    (name: string, state: boolean) => {
+      if (checkList !== null) {
+        const newValue = checkList.map((el) => {
+          if (el.checkName === name) {
+            return {
+              ...el,
+              isCompleted: state,
+            };
+          }
+
+          return el;
+        });
+
+        setCheckState(newValue);
+      }
+    },
+    [checkList]
+  );
+
   return (
     <Drawer open={isOpen} onClose={() => setIsOpen(false)} anchor='right'>
       <div className='m-4 flex h-full w-[600px] flex-col'>
@@ -34,7 +59,18 @@ export const TaskDrawer: React.FC<PropsType> = ({
             {data?.checkList.map((el) => (
               <FormControlLabel
                 key={el.checkName}
-                control={<Checkbox />}
+                control={
+                  <Checkbox
+                    disabled={viewType === 'manager'}
+                    checked={
+                      checkList?.find((ch) => el.checkName == ch.checkName)
+                        ?.isCompleted ?? false
+                    }
+                    onChange={(e) =>
+                      handleCheckboxStateChanged(el.checkName, e.target.checked)
+                    }
+                  />
+                }
                 label={el.description}
               />
             ))}
