@@ -54,4 +54,12 @@ services:
       - 8082:7000
     environment:
       - CAMUNDA_API_BASE_URL=http://camunda:8080/engine-rest
-      - WEBHOOK_PORT=7000
+      - WEBHOOK_PORT=7001
+
+  # fake local smpt server with web UI
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - '1025:1025'
+      - '8025:8025'

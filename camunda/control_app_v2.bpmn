@@ -43,7 +43,7 @@
       <bpmn:boundaryEvent id="Event_0tk6bax" cancelActivity="false" attachedToRef="Activity_0e3bst8">
         <bpmn:outgoing>Flow_0muuix9</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0h1pqik">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1H30M</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT10S</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:boundaryEvent>
       <bpmn:sequenceFlow id="Flow_0muuix9" sourceRef="Event_0tk6bax" targetRef="Activity_1jwgn6d" />
