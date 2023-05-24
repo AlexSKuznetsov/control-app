@@ -18,6 +18,7 @@ services:
       - '80:80'
     environment:
       - BACKEND_BASE_URL=http://backend:8081
+      - NOTIFICATION_SERVICE_URL=http://notification:8082
 
   backend:
     build: ./backend
@@ -51,10 +52,12 @@ services:
     command: npm start
     restart: always
     ports:
-      - 8082:7000
+      - 8082:7001
     environment:
       - CAMUNDA_API_BASE_URL=http://camunda:8080/engine-rest
       - WEBHOOK_PORT=7001
+      - MAILSERVICE_URL=http://mailhog
+      - MAILSERVICE_SMTP_PORT=1025
 
   # fake local smpt server with web UI
   mailhog:

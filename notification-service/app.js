@@ -8,7 +8,7 @@ dotenv.config()
 
 const app = express();
 
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 
 // configuration for the Client:
@@ -40,16 +40,16 @@ app.post('/topic', (req, res) => {
 const client = new Client(config);
 
 const subscribeToTopic = (topicName) => {
+  console.log(process.env.MAILSERVICE_URL)
+
   // create reusable transporter object using the default SMTP transport
-
-
   let transporter = nodemailer.createTransport({
-    host: "127.0.0.1",
-    port: 1025,
+    host: process.env.DEV === 'DEV' ? "127.0.0.1" : 'mailhog',
+    port: process.env.MAILSERVICE_MAILSERVICE_SMTP_PORT || 1025,
     secure: false,
     // auth: {
     //   user: "",
-    //   pass: "",
+    //   pass: "", 
     // },
     logger: true,
   });

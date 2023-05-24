@@ -1,12 +1,9 @@
 import axios, { AxiosError } from 'axios';
-
-const BASE_URL = import.meta.env.DEV
-  ? 'http://localhost:9001'
-  : 'http://localhost:7001';
+import { NOTIFICATION_SERVICE_BASE_URL } from '../shared/constants';
 
 export const updateNotificationTopicName = async (newTopicName: string) => {
   try {
-    const res = await axios.post(`${BASE_URL}/topic`, {
+    const res = await axios.post(`${NOTIFICATION_SERVICE_BASE_URL}/topic`, {
       topicName: newTopicName,
     });
 
