@@ -1,4 +1,4 @@
-# React.js + Camunda BPM + REST API (Node.js) Integration POC
+# React.js + Camunda BPM 7 + REST API (Node.js) Integration POC
 
 This repository contains a proof of concept (POC) demonstrating the integration of React.js, Camunda BPM, and a REST API built with Node.js. The POC showcases a containerized application using Docker, combining frontend, backend, and process orchestration capabilities.
 
