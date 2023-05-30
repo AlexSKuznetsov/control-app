@@ -66,3 +66,17 @@ services:
     ports:
       - '1025:1025'
       - '8025:8025'
+
+  keycloak:
+    image: quay.io/keycloak/keycloak
+    container_name: keycloak
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - '8083:8080'
+    restart: always
+    command:
+      - start-dev
+    volumes:
+      - .local/keycloak/:/opt/keycloak/data/
