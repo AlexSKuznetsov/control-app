@@ -31,7 +31,7 @@ router.get("/process-definition", async (req, res) => {
 router.post("/start-process", async (req: Request, res) => {
   const { processKey, variables } = req.body;
 
-  if (!isUndefined(processKey) && !isUndefined(variables)) {
+  if (isUndefined(processKey) && isUndefined(variables)) {
     try {
       const processResponse = await startProcessInstance(processKey, variables);
 
