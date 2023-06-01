@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "target": "ES6",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "rootDir": "./",
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": false,
+    "strict": true,
+    "noImplicitAny": true,
+    "useUnknownInCatchVariables": false
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  },
+  "include": ["./**/*"],
+  "exclude": ["node_modules"]
+}

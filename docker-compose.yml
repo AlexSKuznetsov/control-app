@@ -23,7 +23,6 @@ services:
   backend:
     build: ./backend
     container_name: express-app
-    command: npm start
     restart: on-failure
     ports:
       - '8081:5000'
