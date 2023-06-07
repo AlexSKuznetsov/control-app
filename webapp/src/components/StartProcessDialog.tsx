@@ -80,7 +80,9 @@ export const StartProcessDialog = (props: DialogProps) => {
                 List of avaliable sites
               </Typography>
               <FormControl fullWidth>
-                <InputLabel id='select-id'>Select a site:</InputLabel>
+                <InputLabel id='select-id' size='small'>
+                  <span className='text-sm text-slate-500'>Select a site:</span>
+                </InputLabel>
                 {siteList && (
                   <Select
                     labelId='select-id'
@@ -88,6 +90,7 @@ export const StartProcessDialog = (props: DialogProps) => {
                     value={site}
                     label='Select a site'
                     onChange={handleChange}
+                    size='small'
                   >
                     {siteList.map((siteName) => (
                       <MenuItem value={siteName} key={siteName}>

@@ -9,7 +9,7 @@ export const NotificationSettings = () => {
   const { mutate } = useUpdateNotificationTopic();
 
   return (
-    <div className='m-2 inline-block rounded border p-4 shadow'>
+    <div className='m-2 w-auto rounded border p-4 shadow'>
       <span className='mx-2 text-lg font-light text-slate-600'>
         Notification settings:
       </span>
@@ -17,16 +17,17 @@ export const NotificationSettings = () => {
         <TextField
           label='topic name'
           variant='outlined'
-          size='small'
           value={topicName}
+          size='small'
           onChange={(e) => setTopicName(e.target.value)}
         />
         <Button
           variant='contained'
           sx={{ marginLeft: '12px' }}
           onClick={() => mutate(topicName)}
+          size='small'
         >
-          Update
+          Set topic
         </Button>
       </div>
 

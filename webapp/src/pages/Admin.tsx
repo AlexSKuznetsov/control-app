@@ -1,20 +1,27 @@
+import { Route, Routes } from 'react-router-dom';
 import {
-  PageLayout,
   NotificationSettings,
   UserSettings,
   SiteList,
   ProcessList,
+  AdminSubmenu,
 } from '../components';
 
 export const AdminPage = () => {
   return (
-    <PageLayout>
-      <div className='grid grid-cols-2 grid-rows-2 gap-1'>
-        <ProcessList />
-        <NotificationSettings />
-        <UserSettings />
-        <SiteList />
-      </div>
-    </PageLayout>
+    <>
+      <AdminSubmenu />
+      <Routes>
+        <Route path='/*' element={<ProcessList />} />
+        <Route path='/dashboard' element={<span>Process dashboard</span>} />
+        <Route path='/userlist' element={<UserSettings />} />
+        <Route path='/sitelists' element={<SiteList />} />
+        <Route path='/notifications' element={<NotificationSettings />} />
+        <Route
+          path='/history'
+          element={<span>table with all process instances</span>}
+        />
+      </Routes>
+    </>
   );
 };

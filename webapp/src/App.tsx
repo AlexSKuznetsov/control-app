@@ -9,7 +9,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Employee />} />
         <Route path='/manager' element={<Manager />} />
-        <Route path='/admin' element={<AdminPage />} />
+        <Route path='/admin/*' element={<AdminPage />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </>

@@ -11,3 +11,4 @@ export { Progress } from './Progress';
 export { SiteList } from './SiteList';
 export { TaskDrawer } from './TaskDrawer';
 export { ProcessList } from './ProcessList';
+export { AdminSubmenu } from './AdminSubmenu';

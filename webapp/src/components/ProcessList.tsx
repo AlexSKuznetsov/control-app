@@ -35,7 +35,7 @@ export const ProcessList = () => {
   }
 
   return (
-    <div className='m-2 inline-block rounded border p-4 shadow'>
+    <div className='w=auto m-2 rounded border p-4 shadow'>
       <p className='mx-2 text-lg font-light text-slate-600'>
         Deployed process list:
       </p>

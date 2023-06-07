@@ -9,7 +9,7 @@ export const NavElement: React.FC<PropsType> = ({ linkTo, linkName }) => {
   return (
     <NavLink
       to={linkTo}
-      className='block py-2 pl-3 pr-4 text-gray-900 aria-[current=page]:text-blue-700'
+      className='aria-[current=page] block border-blue-600 px-4 py-4 font-semibold text-white aria-[current=page]:border-b-4 aria-[current=page]:bg-slate-800   aria-[current=page]:text-slate-100'
     >
       {linkName}
     </NavLink>

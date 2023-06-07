@@ -128,9 +128,10 @@ export const TaskTable: FC<{ viewType: 'employee' | 'manager' }> = ({
                       <Chip
                         label={
                           <span
-                            className={classNames('text-xs text-slate-600', {
+                            className={classNames('text-xs', {
                               'text-red-600': row.status === 'rejected',
                               'text-green-600': row.status === 'completed',
+                              'text-slate-600': row.status === 'in progress',
                             })}
                           >
                             {row.status}
