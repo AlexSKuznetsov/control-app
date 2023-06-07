@@ -1,7 +1,6 @@
 import { Router, Request, Response } from "express";
 import axios, { AxiosError } from "axios";
 import isUndefined from "lodash";
-("lodash");
 import { BASE_URL } from "../config";
 import {
   createProcessPayload,
