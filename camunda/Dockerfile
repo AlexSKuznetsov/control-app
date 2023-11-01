@@ -1,5 +1,5 @@
 # Base image
-FROM camunda/camunda-bpm-platform:7.19.0
+FROM camunda/camunda-bpm-platform:latest
 
 # Set working directory
 WORKDIR /camunda
