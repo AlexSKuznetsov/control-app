@@ -10,6 +10,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.options('*', cors());
 
 // configuration for the Client:
 //  - 'baseUrl': url to the Process Engine
@@ -40,11 +41,10 @@ app.post('/topic', (req, res) => {
 const client = new Client(config);
 
 const subscribeToTopic = (topicName) => {
-  console.log(process.env.MAILSERVICE_URL)
 
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
-    host: process.env.DEV === 'DEV' ? "127.0.0.1" : 'mailhog',
+    host: process.env.DEV === 'DEV' || process.env.DEV === undefined ? '127.0.0.1' : 'mailhog',
     port: process.env.MAILSERVICE_MAILSERVICE_SMTP_PORT || 1025,
     secure: false,
     // auth: {

@@ -11,7 +11,7 @@ export const {
   PROCESSES_COLLECTION,
 } = {
   PORT: process.env.PORT || 6001,
-  BASE_URL: process.env.CAMUNDA_API_BASE_URL || "8080",
+  BASE_URL: process.env.CAMUNDA_API_BASE_URL || "localhost:8080/engine-rest",
   MONGODB_URL: process.env.MONGODB_URL || "localhost:27017",
   ENV: process.env.ENV,
   DB_NAME: process.env.DB_NAME || "control-app",
